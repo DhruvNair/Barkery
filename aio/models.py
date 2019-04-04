@@ -4,19 +4,14 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 #### Pet Adoption tables ####
-class breed(models.Model):
+class animal(models.Model):
+    typename=models.CharField(max_length=100)
     breedname=models.CharField(max_length=100)
     lifespan=models.IntegerField(default=0)
     height=models.FloatField(default=0.0)
     weight=models.FloatField(default=0.0)
-
-class animal(models.Model):
-    breedname=models.ForeignKey(breed, on_delete=models.CASCADE)
-    typename=models.CharField(max_length=100)
-
-class color(models.Model):
-    breedname=models.ManyToManyField(breed)
-    color=models.CharField(max_length=10)
+    color=models.CharField(max_length=10, null=True)
+    temperament=models.CharField(max_length=100, null=True)
 
 class location(models.Model):
     housenumber = models.CharField(max_length=100)
@@ -26,10 +21,6 @@ class location(models.Model):
     state = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
 
-class temperament(models.Model):
-    breedname=models.ManyToManyField(breed)
-    temperament=models.CharField(max_length=100)
-
 class pet(models.Model):
     animal = models.ForeignKey(animal, on_delete=models.CASCADE)   
     age = models.IntegerField(default=0)
@@ -37,10 +28,7 @@ class pet(models.Model):
     remarks = models.CharField(max_length=100)
     daysonbarkery = models.IntegerField(default=0)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
-
-class disease(models.Model):
-    pet=models.ForeignKey(pet, on_delete=models.CASCADE)
-    disease=models.CharField(max_length=100)
+    disease=models.CharField(max_length=100, null=True)
 
 #### Shop tables ####
 class brand(models.Model):
@@ -58,6 +46,3 @@ class item(models.Model):
     cost = models.FloatField(default=0.0)
     rating = models.FloatField(default=0.0)
     brand = models.ForeignKey(brand, on_delete=models.CASCADE)
-
-
-# Create your models here.
