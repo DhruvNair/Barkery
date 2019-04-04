@@ -33,5 +33,3 @@ class AddItem(forms.Form):
     brand = forms.CharField(required=True, min_length=3, label='Brand')
     animal_types = forms.ChoiceField(choices=animal_choices, label='For Animal')
     animal_breeds = forms.CharField(required=True, min_length=3, label='And Breed')
-
-    

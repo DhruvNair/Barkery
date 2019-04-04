@@ -18,19 +18,17 @@ class animal(models.Model):
 class location(models.Model):
     housenumber = models.CharField(max_length=100)
     street = models.CharField(max_length=100)
-    pincode = models.IntegerField(default=0)
+    pincode = models.CharField(max_length=6)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
-    class Meta:
-        unique_together = (('pincode', 'street'))
 
 class pet(models.Model):
     animal = models.ForeignKey(animal, on_delete=models.CASCADE)
     pet_name = models.CharField(default= "Tommy", max_length=20)
     age = models.IntegerField(default=0)
     gender = models.BooleanField(default=False)
-    remarks = models.CharField(max_length=100)
+    remarks = models.CharField(max_length=100, null=True)
     daysonbarkery = models.IntegerField(default=0)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
     disease=models.CharField(max_length=100, null=True)
@@ -39,8 +37,8 @@ class pet(models.Model):
 class brand(models.Model):
     brand_name=models.CharField(default = "Brand", max_length=100, primary_key = True)
     rating=models.FloatField(default=0.0)
-    email=models.CharField(max_length=100)
-    contact=models.CharField(max_length=10)
+    email=models.CharField(max_length=100, null=True)
+    contact=models.CharField(max_length=10, null=True)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
 
 class item(models.Model):
