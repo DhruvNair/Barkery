@@ -16,7 +16,7 @@ class animal(models.Model):
 
 class color(models.Model):
     breedname=models.ManyToManyField(breed)
-    color=models.CharField(max_length=0)
+    color=models.CharField(max_length=10)
 
 class location(models.Model):
     housenumber = models.CharField(max_length=100)
