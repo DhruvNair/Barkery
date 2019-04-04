@@ -33,3 +33,8 @@ class AddItem(forms.Form):
     brand = forms.CharField(required=True, min_length=3, label='Brand')
     animal_types = forms.CharField(required=True, min_length=3,label='For Animal')
     animal_breeds = forms.CharField(required=True, min_length=3, label='And Breed')
+
+class AddLocation(forms.ModelForm):
+        class Meta:
+                model = location
+                fields = ("housenumber","street","pincode","city","state","country")

@@ -74,10 +74,8 @@ def add_item(request):
                 cursor.execute('SELECT * FROM aio_animal WHERE animal_type = %s AND animal_breed = %s', [animal_types,animal_breeds])
                 result = dictfetchall(cursor)
                 animalid=result[0]['id']
-                print (animalid)
                 cursor.execute('SELECT * FROM aio_brand WHERE brand_name = %s', [brand])
                 result1 = dictfetchall(cursor)
-                print(result1)
                 brandid=result1[0]['brand_name']
                 cursor.execute('INSERT INTO `aio_item` (`item_name`,`item_type`,`description`,`cost`,`rating`,`animal_id`,`brand_id`) VALUES ("{}","{}","{}",{},{},{},"{}");'.format(item_name,item_type,description,cost,rating,animalid,brandid))
                 connection.commit()
@@ -91,6 +89,34 @@ def add_item(request):
 	    "form" : form
     }
     return render(request, "aio/add_item.html", context)
+
+def add_location(request):
+    form = AddItem()
+    if request.method == 'POST':
+        form = AddItem(request.POST)
+        if form.is_valid():
+            housenumber=str(form.cleaned_data['housenumber'])
+            street=str(form.cleaned_data['street'])
+            pincode=str(form.cleaned_data['pincode'])
+            city=str(form.cleaned_data['city'])
+            state=str(form.cleaned_data['state'])
+            country=str(form.cleaned_data['country'])
+            try:
+                cursor = connection.cursor()
+                cursor.execute('INSERT INTO `aio_location` (`housenumber`,`street`,`pincode`,`city`,`state`,`country`) VALUES ("{}","{}","{}","{}""{}","{}");'.format(housenumber,street,pincode,city,state,country))
+                connection.commit()
+                print ("Record inserted successfully into aio_animals table")
+                messages.success(request, f'Stock successfully added.')
+                return redirect('home')
+            except mysql.connector.Error as error :
+                connection.rollback() #rollback if any exception occured
+                print("Failed inserting record into aio_animals table {}".format(error))
+    context = {
+	    "form" : form
+    }
+    return render(request, "aio/add_location.html", context)
+
+def add_pet
 
 
 
