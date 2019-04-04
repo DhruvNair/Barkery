@@ -20,7 +20,7 @@ class color(models.Model):
     color=models.CharField(max_length=0)
 
 class temperament(models.Model):
-    breedname=models.ManyToManyField(breed, on_delete=models.CASCADE)
+    breedname=models.ManyToManyField(breed)
     temperament=models.CharField(max_length=100)
 
 class pet(models.Model):
