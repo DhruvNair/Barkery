@@ -5,13 +5,15 @@ from django.urls import reverse
 
 #### Pet Adoption tables ####
 class animal(models.Model):
-    typename=models.CharField(max_length=100)
-    breedname=models.CharField(max_length=100)
-    lifespan=models.IntegerField(default=0)
+    type=models.CharField(max_length=100)
+    breed=models.CharField(max_length=100)
+    avglife=models.IntegerField(default=0)
     height=models.FloatField(default=0.0)
     weight=models.FloatField(default=0.0)
     color=models.CharField(max_length=100, null=True)
     temperament=models.CharField(max_length=100, null=True)
+    class Meta:
+        unique_together = (('typename', 'breedname'))
 
 class location(models.Model):
     housenumber = models.CharField(max_length=100)
@@ -20,9 +22,12 @@ class location(models.Model):
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
+    class Meta:
+        unique_together = (('pincode', 'street'))
 
 class pet(models.Model):
-    animal = models.ForeignKey(animal, on_delete=models.CASCADE)   
+    animal = models.ForeignKey(animal, on_delete=models.CASCADE)
+    name = models.CharField(max_length=20)
     age = models.IntegerField(default=0)
     gender = models.BooleanField(default=False)
     remarks = models.CharField(max_length=100)
@@ -32,16 +37,16 @@ class pet(models.Model):
 
 #### Shop tables ####
 class brand(models.Model):
-    brandname=models.CharField(max_length=100)
-    brandrating=models.FloatField(default=0.0)
+    name=models.CharField(max_length=100, primary_key = True)
+    rating=models.FloatField(default=0.0)
     email=models.CharField(max_length=100)
     contact=models.CharField(max_length=10)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
 
 class item(models.Model):
-    itemname = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     animal = models.ForeignKey(animal, on_delete=models.CASCADE)
-    itemtype = models.CharField(max_length=100)
+    type = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
     cost = models.FloatField(default=0.0)
     rating = models.FloatField(default=0.0)
