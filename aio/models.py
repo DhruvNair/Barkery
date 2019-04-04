@@ -15,11 +15,11 @@ class breed(models.Model):
     weight=models.FloatField(default=0.0)
     
 class color(models.Model):
-    breedname=models.ForeignKey(breed, on_delete=models.CASCADE)
+    breedname=models.ManyToManyField(breed)
     color=models.CharField(max_length=0)
 
 class temperament(models.Model):
-    breedname=models.ForeignKey(breed, on_delete=models.CASCADE)
+    breedname=models.ManyToManyField(breed, on_delete=models.CASCADE)
     temperament=models.CharField(max_length=100)
 
 class pet(models.Model):
@@ -28,9 +28,9 @@ class pet(models.Model):
     gender = models.BooleanField(default=False)
     remarks = models.CharField(max_length=100)
     daysonbarkery = models.IntegerField(default=0)
+    location = models.ForeignKey(petlocation, on_delete=models.CASCADE)
 
 class petlocation(models.Model):
-    pet=models.ForeignKey(pet, on_delete=models.CASCADE)
     housenumber = models.CharField(max_length=100)
     street = models.charField(max_length=100)
     pincode = models.IntegerField(default=0)
