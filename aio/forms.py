@@ -31,5 +31,5 @@ class AddItem(forms.Form):
     cost = forms.FloatField(label='Cost of Item')
     rating = forms.FloatField(label='Rating')
     brand = forms.CharField(required=True, min_length=3, label='Brand')
-    animal_types = forms.ChoiceField(choices=animal_choices, label='For Animal')
+    animal_types = forms.CharField(required=True, min_length=3,label='For Animal')
     animal_breeds = forms.CharField(required=True, min_length=3, label='And Breed')

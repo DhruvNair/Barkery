@@ -6,7 +6,7 @@ from django.utils.timezone import utc
 from django.contrib import messages
 from django.db import connection
 from collections import namedtuple
-from .forms import AddAnimal
+from .forms import *
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
@@ -63,21 +63,23 @@ def add_item(request):
         if form.is_valid():
             item_name=str(form.cleaned_data['name'])
             item_type=str(form.cleaned_data['type'])
-            description=int(form.cleaned_data['description'])
+            description=str(form.cleaned_data['description'])
             cost=float(form.cleaned_data['cost'])
             rating=float(form.cleaned_data['rating'])
             brand=str(form.cleaned_data['brand'])
-            animal_types=str(form.cleaned_data['animal_type'])
-            animal_breeds=str(form.cleaned_data['animal_breed'])
+            animal_types=str(form.cleaned_data['animal_types'])
+            animal_breeds=str(form.cleaned_data['animal_breeds'])
             try:
                 cursor = connection.cursor()
-                cursor.execute('SELECT * FROM aio_animal WHERE animal_type = %s AND animal_breed = %s', [animal_type,animal_breed])
+                cursor.execute('SELECT * FROM aio_animal WHERE animal_type = %s AND animal_breed = %s', [animal_types,animal_breeds])
                 result = dictfetchall(cursor)
-                animalid=result[0].id
+                animalid=result[0]['id']
+                print (animalid)
                 cursor.execute('SELECT * FROM aio_brand WHERE brand_name = %s', [brand])
                 result1 = dictfetchall(cursor)
-                brandid=result[0].id
-                cursor.execute('INSERT INTO `aio_item` (`item_name`,`item_type`,`description`,`cost`,`rating`,`animal`,`brand`) VALUES ("{}","{}","{}",{},{},{},{});'.format(item_name,item_type,description,cost,rating))
+                print(result1)
+                brandid=result1[0]['brand_name']
+                cursor.execute('INSERT INTO `aio_item` (`item_name`,`item_type`,`description`,`cost`,`rating`,`animal_id`,`brand_id`) VALUES ("{}","{}","{}",{},{},{},"{}");'.format(item_name,item_type,description,cost,rating,animalid,brandid))
                 connection.commit()
                 print ("Record inserted successfully into aio_items table")
                 messages.success(request, f'Stock successfully added.')
