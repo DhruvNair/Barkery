@@ -4,15 +4,16 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 #### Pet Adoption tables ####
-class animal(models.Model):
-    breedname=models.ForeignKey(breed, on_delete=models.CASCADE)
-    typename=models.CharField(max_length=100)
-
 class breed(models.Model):
     breedname=models.CharField(max_length=100)
     lifespan=models.IntegerField(default=0)
     height=models.FloatField(default=0.0)
     weight=models.FloatField(default=0.0)
+class animal(models.Model):
+    breedname=models.ForeignKey(breed, on_delete=models.CASCADE)
+    typename=models.CharField(max_length=100)
+
+
     
 class color(models.Model):
     breedname=models.ManyToManyField(breed)
