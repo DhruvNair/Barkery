@@ -19,6 +19,6 @@ from django.urls import include
 import aio
 
 urlpatterns = [
+    path('', include('aio.urls')),
     path('admin/', admin.site.urls),
-    path('aio/', include('aio.urls')),
 ]
