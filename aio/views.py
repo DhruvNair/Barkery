@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import *
+from .models import animal
 from django.utils import *
 from django.utils.timezone import utc
 from django.contrib import messages
 from django.db import connection
 from collections import namedtuple
-from .forms import *
+from .forms import AddAnimal
+import mysql.connector
+from mysql.connector import Error
+from mysql.connector import errorcode
 
 def display_home(request):
     return render(request, 'aio/home.html')
@@ -24,27 +27,23 @@ def add_animal(request):
     if request.method == 'POST':
         form = AddAnimal(request.POST)
         if form.is_valid():
-            type=form.cleaned_data['type']
-            breed=form.cleaned_data['breed']
-            avglife=form.cleaned_data['avglife']
-            height=form.cleaned_data['height']
-            weight=form.cleaned_data['weight']
-            color=form.cleaned_data['color']
-            temperament=form.cleaned_data['temparament']
+            type=str(form.cleaned_data['type'])
+            breed=str(form.cleaned_data['breed'])
+            avglife=int(form.cleaned_data['avglife'])
+            height=float(form.cleaned_data['height'])
+            weight=float(form.cleaned_data['weight'])
+            color=str(form.cleaned_data['color'])
+            temperament=str(form.cleaned_data['temperament'])
             try:
-                sql_insert_query = """INSERT INTO `animal`
-                         VALUES (%s,%s,%d,%f,%f,%s,%s)"""
                 cursor = connection.cursor()
-                insert_tuple=(type,breed,avglife,height,weight,color,temperament)
-
-                result  = cursor.execute(sql_insert_query,insert_tuple)
+                cursor.execute('INSERT INTO `aio_animal` (`type`,`breed`,`avglife`,`height`,`weight`,`color`,`temperament`) VALUES ("{}","{}",{},{},{},"{}","{}");'.format(type,breed,avglife,height,weight,color,temperament))
                 connection.commit()
                 print ("Record inserted successfully into python_users table")
                 messages.success(request, f'Stock successfully added.')
                 return redirect('home')
             except mysql.connector.Error as error :
                 connection.rollback() #rollback if any exception occured
-                print("Failed inserting record into python_users table {}".format(error))
+                print("Failed inserting record into aio_animals table {}".format(error))
     context = {
 		"form" : form
 	 }
