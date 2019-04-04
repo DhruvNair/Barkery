@@ -5,8 +5,8 @@ from django.urls import reverse
 
 #### Pet Adoption tables ####
 class animal(models.Model):
-    type=models.CharField(max_length=100)
-    breed=models.CharField(max_length=100)
+    animal_type=models.CharField(max_length=100)
+    animal_breed=models.CharField(max_length=100)
     avglife=models.IntegerField(default=0)
     height=models.FloatField(default=0.0)
     weight=models.FloatField(default=0.0)
