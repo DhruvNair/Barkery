@@ -56,7 +56,7 @@ def add_animal(request):
 	 }
     return render(request, "aio/add_animal.html", context)
 
-def add_item(request):
+'''def add_item(request):
     form = AddItem()
     if request.method == 'POST':
         form = AddItem(request.POST)
@@ -83,7 +83,7 @@ def add_item(request):
             except mysql.connector.Error as error :
                 connection.rollback() #rollback if any exception occured
                 print("Failed inserting record into aio_animals table {}".format(error))
-
+'''
 
 
 # Create your views here.
