@@ -10,7 +10,7 @@ class animal(models.Model):
     lifespan=models.IntegerField(default=0)
     height=models.FloatField(default=0.0)
     weight=models.FloatField(default=0.0)
-    color=models.CharField(max_length=10, null=True)
+    color=models.CharField(max_length=100, null=True)
     temperament=models.CharField(max_length=100, null=True)
 
 class location(models.Model):
