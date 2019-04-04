@@ -54,7 +54,7 @@ def add_animal(request):
     context = {
 		"form" : form
 	 }
-    return render(request, "aio/add_animal.html", context)
+    return render(request, "aio/add_item.html", context)
 
 def add_item(request):
     form = AddItem()
@@ -85,6 +85,10 @@ def add_item(request):
             except mysql.connector.Error as error :
                 connection.rollback() #rollback if any exception occured
                 print("Failed inserting record into aio_items table {}".format(error))
+    context = {
+	    "form" : form
+    }
+    return render(request, "aio/add_item.html", context)
 
 
 
