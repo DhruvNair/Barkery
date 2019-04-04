@@ -24,9 +24,9 @@ def add_animal(request):
     if request.method == 'POST':
         form = AddAnimal(request.POST)
         if form.is_valid():
-            typename=form.cleaned_data['typename']
-            breedname=form.cleaned_data['breedname']
-            lifespan=form.cleaned_data['lifespan']
+            type=form.cleaned_data['type']
+            breed=form.cleaned_data['breed']
+            avglife=form.cleaned_data['avglife']
             height=form.cleaned_data['height']
             weight=form.cleaned_data['weight']
             color=form.cleaned_data['color']
@@ -35,7 +35,7 @@ def add_animal(request):
                 sql_insert_query = """INSERT INTO `animal`
                          VALUES (%s,%s,%d,%f,%f,%s,%s)"""
                 cursor = connection.cursor()
-                insert_tuple=(typename,breedname,lifespan,height,weight,color,temperament)
+                insert_tuple=(type,breed,avglife,height,weight,color,temperament)
 
                 result  = cursor.execute(sql_insert_query,insert_tuple)
                 connection.commit()
