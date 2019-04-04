@@ -32,6 +32,7 @@ class pet(models.Model):
     daysonbarkery = models.IntegerField(default=0)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
     disease=models.CharField(max_length=100, null=True)
+    photo = models.ImageField(null=True)
 
 #### Shop tables ####
 class brand(models.Model):
@@ -40,6 +41,7 @@ class brand(models.Model):
     email=models.CharField(max_length=100, null=True)
     contact=models.CharField(max_length=10, null=True)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
+    logo = models.ImageField(null=True)
 
 class item(models.Model):
     item_name = models.CharField(max_length=100)
@@ -49,3 +51,16 @@ class item(models.Model):
     cost = models.FloatField(default=0.0)
     rating = models.FloatField(default=0.0)
     brand = models.ForeignKey(brand, on_delete=models.CASCADE)
+    photo = models.ImageField(null=True)
+
+class shelter(models.Model):
+    shelter_name = models.CharField(max_length=50)
+    location = models.ForeignKey(location, on_delete=models.CASCADE)
+    animals = models.CharField(max_length=100)
+    logo = models.ImageField(null=True)
+
+
+class vet(models.Model):
+    # profile = 
+    specialization = models.CharField(max_length=100)
+    location = models.ForeignKey(location, on_delete=models.CASCADE)
