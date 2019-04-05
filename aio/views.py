@@ -14,8 +14,6 @@ from mysql.connector import errorcode
 def display_home(request):
     return render(request, 'aio/home.html')
 
-
-
 def namedtuplefetchall(cursor):
     row=0
     desc = cursor.description
@@ -93,20 +91,23 @@ def add_item(request):
 def add_location(request):
     form = AddLocation()
     if request.method == 'POST':
-        form = AddItem(request.POST)
+        form = AddLocation(request.POST)
         if form.is_valid():
             housenumber=str(form.cleaned_data['housenumber'])
             street=str(form.cleaned_data['street'])
             pincode=str(form.cleaned_data['pincode'])
-            city=str(form.cleaned_data['city'])
-            location_state=str(form.cleaned_data['state'])
-            country=str(form.cleaned_data['country'])
             try:
                 cursor = connection.cursor()
-                cursor.execute('INSERT INTO `aio_location` (`housenumber`,`street`,`pincode`,`city`,`location_state`,`country`) VALUES ("{}","{}","{}","{}""{}","{}");'.format(housenumber,street,pincode,city,location_state,country))
+                cursor.execute('SELECT * FROM aio_pindata WHERE pincode = %s', [pincode])
+                result = dictfetchall(cursor)
+                print(result)
+                if result == []:
+                    messages.error(request, f'Pincode not available in our database')
+                    return redirect('addlocation')
+                cursor.execute('CALL newLocation("{}","{}","{}")'.format(housenumber,street,pincode))
                 connection.commit()
-                print ("Record inserted successfully into aio_animals table")
-                messages.success(request, f'Stock successfully added.')
+                print ("Record inserted successfully into aio_location table")
+                messages.success(request, f'Location successfully added.')
                 return redirect('home')
             except mysql.connector.Error as error :
                 connection.rollback() #rollback if any exception occured

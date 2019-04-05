@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-from django.urls import reverse
 
 #### Pet Adoption tables ####
 class animal(models.Model):
@@ -15,13 +14,28 @@ class animal(models.Model):
     class Meta:
         unique_together = (('animal_type', 'animal_breed'))
 
+class pindata(models.Model):
+    pincode = models.CharField(max_length = 10, primary_key=True)
+    city = models.CharField(max_length = 20)
+    state = models.CharField(max_length=20)
+    country = models.CharField(max_length=20)
+
 class location(models.Model):
     housenumber = models.CharField(max_length=100)
     street = models.CharField(max_length=100)
-    pincode = models.CharField(max_length=6)
-    city = models.CharField(max_length=100)
-    location_state = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
+    pincode = models.ForeignKey(pindata, on_delete=models.CASCADE)
+
+#### Profile + Vet ####
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(max_length=500, blank=True)
+    photo = models.ImageField(null=True, blank=True)
+
+class vet(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    specialization = models.CharField(max_length=100)
+    location = models.ForeignKey(location, on_delete=models.CASCADE)
+    verified = models.BooleanField(default=False)
 
 class pet(models.Model):
     animal = models.ForeignKey(animal, on_delete=models.CASCADE)
@@ -32,7 +46,9 @@ class pet(models.Model):
     onbarkerysince=models.DateTimeField(default=timezone.now)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
     disease=models.CharField(max_length=100, null=True)
-    photo = models.ImageField(null=True)
+    user = models.ForeignKey(Profile,null=True, on_delete=models.CASCADE)
+    photo = models.ImageField(null=True, blank=True)
+    adopted = models.BooleanField(default=False)
 
 #### Shop tables ####
 class brand(models.Model):
@@ -41,7 +57,7 @@ class brand(models.Model):
     email=models.CharField(max_length=100, null=True)
     contact=models.CharField(max_length=10, null=True)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
-    logo = models.ImageField(null=True)
+    logo = models.ImageField(null=True, blank=True)
 
 class item(models.Model):
     item_name = models.CharField(max_length=100)
@@ -51,16 +67,10 @@ class item(models.Model):
     cost = models.FloatField(default=0.0)
     rating = models.FloatField(default=0.0)
     brand = models.ForeignKey(brand, on_delete=models.CASCADE)
-    photo = models.ImageField(null=True)
+    photo = models.ImageField(null=True, blank=True)
 
 class shelter(models.Model):
     shelter_name = models.CharField(max_length=50)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
     animals = models.CharField(max_length=100)
-    logo = models.ImageField(null=True)
-
-
-class vet(models.Model):
-    # profile = 
-    specialization = models.CharField(max_length=100)
-    location = models.ForeignKey(location, on_delete=models.CASCADE)
+    logo = models.ImageField(null=True, blank=True)

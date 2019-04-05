@@ -36,12 +36,11 @@ class AddItem(forms.Form):
     animal_types = forms.CharField(required=True, min_length=3,label='For Animal')
     animal_breeds = forms.CharField(required=True, min_length=3, label='And Breed')
 
-class AddLocation(forms.ModelForm):
-        class Meta:
-                model = location
-                fields = ("housenumber","street","pincode","city","state","country")
-
-class AddPet(forms.ModelForm):
+class AddLocation(forms.Form):
+        housenumber = forms.CharField(required=True, min_length=2, label="House Name")
+        street = forms.CharField(required=True, min_length=2, label="Street")
+        pincode = forms.CharField(required=True, min_length=2, label="Pincode")
+class AddPet(forms.Form):
        pet_name=forms.CharField(required=True, min_length=2, label="Name of Pet")
        age=forms.IntegerField(label="Age of Pet")
        gender = forms.ChoiceField(choices=ch, label='Gender')
