@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import animal
-from django.utils import *
 from django.utils.timezone import utc
+from django.utils import timezone
 from django.contrib import messages
 from django.db import connection
 from collections import namedtuple
@@ -91,7 +91,7 @@ def add_item(request):
     return render(request, "aio/add_item.html", context)
 
 def add_location(request):
-    form = AddItem()
+    form = AddLocation()
     if request.method == 'POST':
         form = AddItem(request.POST)
         if form.is_valid():
@@ -99,11 +99,11 @@ def add_location(request):
             street=str(form.cleaned_data['street'])
             pincode=str(form.cleaned_data['pincode'])
             city=str(form.cleaned_data['city'])
-            state=str(form.cleaned_data['state'])
+            location_state=str(form.cleaned_data['state'])
             country=str(form.cleaned_data['country'])
             try:
                 cursor = connection.cursor()
-                cursor.execute('INSERT INTO `aio_location` (`housenumber`,`street`,`pincode`,`city`,`state`,`country`) VALUES ("{}","{}","{}","{}""{}","{}");'.format(housenumber,street,pincode,city,state,country))
+                cursor.execute('INSERT INTO `aio_location` (`housenumber`,`street`,`pincode`,`city`,`location_state`,`country`) VALUES ("{}","{}","{}","{}""{}","{}");'.format(housenumber,street,pincode,city,location_state,country))
                 connection.commit()
                 print ("Record inserted successfully into aio_animals table")
                 messages.success(request, f'Stock successfully added.')
@@ -116,8 +116,52 @@ def add_location(request):
     }
     return render(request, "aio/add_location.html", context)
 
-def add_pet
+def add_pet(request):
+    form = AddItem()
+    form1 = AddLocation()
+    if request.method == 'POST':
+        form = AddItem(request.POST)
+        if form.is_valid() and form1.is_valid():
+            pet_name=str(form.cleaned_data['pet_name'])
+            age=int(form.cleaned_data['age'])
+            gender=str(form.cleaned_data['gender'])
+            remarks=str(form.cleaned_data['remarks'])
+            disease=str(form.cleaned_data['disease'])
+            animal_types=str(form.cleaned_data['animal_types'])
+            animal_breeds=str(form.cleaned_data['animal_breeds'])
 
+            housenumber=str(form1.cleaned_data['housenumber'])
+            street=str(form1.cleaned_data['street'])
+            pincode=str(form1.cleaned_data['pincode'])
+            city=str(form1.cleaned_data['city'])
+            location_state=str(form1.cleaned_data['state'])
+            country=str(form1.cleaned_data['country'])
+
+            try:
+                cursor = connection.cursor()
+                cursor.execute('SELECT * FROM aio_animal WHERE animal_type = %s AND animal_breed = %s', [animal_types,animal_breeds])
+                result = dictfetchall(cursor)
+                animalid=result[0]['id']
+                cursor.execute('SELECT * FROM aio_location WHERE housenumber = %s AND street = %s AND pincode = %s AND city = %s AND location_state = %s AND country = %s', [housenumber,street,pincode,city,location_state,country])
+                result = dictfetchall(cursor)
+                if result == []:
+                    cursor.execute('INSERT INTO `aio_location` (`housenumber`,`street`,`pincode`,`city`,`location_state`,`country`) VALUES ("{}","{}","{}","{}""{}","{}");'.format(housenumber,street,pincode,city,location_state,country))
+                cursor.execute('SELECT * FROM aio_location WHERE housenumber = %s AND street = %s AND pincode = %s AND city = %s AND location_state = %s AND country = %s', [housenumber,street,pincode,city,location_state,country])
+                result = dictfetchall(cursor)
+                locationid=result[0]['id']
+                cursor.execute('INSERT INTO `aio_pet` (`pet_name`,`age`,`gender`,`remarks`,`disease`,`animal_id`,`location_id`) VALUES ("{}",{},"{}","{}","{}",{},{});'.format(pet_name,age,gender,remarks,disease,animalid,locationid))
+                connection.commit()
+                print ("Record inserted successfully into aio_pet table")
+                messages.success(request, f'Stock successfully added.')
+                return redirect('home')
+            except mysql.connector.Error as error :
+                connection.rollback() #rollback if any exception occured
+                print("Failed inserting record into aio_pet table {}".format(error))
+    context = {
+	    "form" : form,
+        "form1":form1,
+    }
+    return render(request, "aio/add_pet.html", context)
 
 
 # Create your views here.

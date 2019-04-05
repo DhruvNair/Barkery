@@ -18,7 +18,9 @@ animal_choices = (('Dog','Dog'),
         ('Lizard','Lizard'),
         ('Fish','Fish'),
 )
-
+ch=(('M','Male'),
+('F','Female'),
+)
 class AddAnimal(forms.ModelForm):
     class Meta:
         model = animal
@@ -38,3 +40,13 @@ class AddLocation(forms.ModelForm):
         class Meta:
                 model = location
                 fields = ("housenumber","street","pincode","city","state","country")
+
+class AddPet(forms.ModelForm):
+       pet_name=forms.CharField(required=True, min_length=2, label="Name of Pet")
+       age=forms.IntegerField(label="Age of Pet")
+       gender = forms.ChoiceField(choices=ch, label='Gender')
+       remarks = forms.CharField(label="Remarks(if any)")
+       disease = forms.CharField(label="Diseases(if any): [Separate using ,]")
+       animal_types = forms.CharField(required=True, min_length=3,label='Animal')
+       animal_breeds = forms.CharField(required=True, min_length=3,label='Breed')
+       
