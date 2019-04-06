@@ -60,5 +60,5 @@ class AddBrand(forms.ModelForm):
         contact = forms.CharField(required=True, strip=True, min_length=10, max_length=13)
 	class Meta:
 		model = brand
-		fields = ['brand_name','rating','email','contact',]
+		fields = ['brand_name','rating','email','contact',]                     #'logo'
                 

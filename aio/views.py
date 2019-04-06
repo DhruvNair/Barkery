@@ -118,10 +118,11 @@ def add_location(request):
     return render(request, "aio/add_location.html", context)
 
 def add_pet(request):
-    form = AddItem()
+    form = AddPet()
     form1 = AddLocation()
     if request.method == 'POST':
-        form = AddItem(request.POST)
+        form = AddPet(request.POST)
+        form1 = AddLocation(request.POST)
         if form.is_valid() and form1.is_valid():
             pet_name=str(form.cleaned_data['pet_name'])
             age=int(form.cleaned_data['age'])
@@ -176,7 +177,8 @@ def add_brand(request):
     form = AddBrand()
     form1 = AddLocation()
     if request.method == 'POST':
-        form = AddItem(request.POST)
+        form = AddBrand(request.POST)               #, request.FILES
+        form1 = AddLocation(request.POST)
         if form.is_valid() and form1.is_valid():
             housenumber=str(form1.cleaned_data['housenumber'])
             street=str(form1.cleaned_data['street'])
@@ -189,6 +191,7 @@ def add_brand(request):
             rating=str(form.cleaned_data['rating'])
             email=str(form.cleaned_data['email'])
             contact=str(form.cleaned_data['contact'])
+            #logo=form.cleaned_data['logo']
 
             try:
                 cursor = connection.cursor()

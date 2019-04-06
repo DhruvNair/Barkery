@@ -57,7 +57,7 @@ class pet(models.Model):
     location = models.ForeignKey(location, on_delete=models.CASCADE)
     disease=models.CharField(max_length=100, null=True)
     user = models.ForeignKey(Profile,null=True, on_delete=models.CASCADE)
-    photo = models.ImageField(null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pet_pics')
     adopted = models.BooleanField(default=False)
 
     def __str__(self):
