@@ -21,31 +21,44 @@ animal_choices = (('Dog','Dog'),
 ch=(('M','Male'),
 ('F','Female'),
 )
-class AddAnimal(forms.ModelForm):
-    class Meta:
-        model = animal
-        fields = ("animal_type","animal_breed","avglife","height","weight","color","temperament")
+class AddAnimal(forms.Form):
+        animal_type = forms.ChoiceField(choices=animal_choices, label='Type of Animal')
+        animal_breed = forms.CharField(required=True, min_length=3, strip=True, label='And Breed')
+        avglife = forms.IntegerField(min_value=1, label="Average Life")
+        height = forms.FloatField(min_value = 0.1, label = "Height")
+        weight = forms.FloatField(min_value = 0.1, label = "Weight")
+        color = forms.CharField(required=True, min_length=3, strip=True, label='Colors Available')
+        temperament = forms.CharField(required=True, min_length=3, strip=True, label='General Temperament')
+
 
 class AddItem(forms.Form):
-    name = forms.CharField(required=True, min_length=3, label='Name of Item')
+    name = forms.CharField(required=True, min_length=3, strip=True, label='Name of Item')
     type = forms.ChoiceField(choices=choices, label='Type of Item')
-    description = forms.CharField(required=True, min_length=3, label='Description')
-    cost = forms.FloatField(label='Cost of Item')
-    rating = forms.FloatField(label='Rating')
-    brand = forms.CharField(required=True, min_length=3, label='Brand')
-    animal_types = forms.CharField(required=True, min_length=3,label='For Animal')
-    animal_breeds = forms.CharField(required=True, min_length=3, label='And Breed')
+    description = forms.CharField(required=True, min_length=3, strip=True, label='Description')
+    cost = forms.FloatField(min_value = 1.0, label='Cost of Item')
+    rating = forms.FloatField(min_value = 1.0, label='Rating')
+    brand = forms.CharField(required=True, min_length=3, strip=True, label='Brand')
+    animal_types = forms.ChoiceField(choices=animal_choices, label='For Animal')
+    animal_breeds = forms.CharField(required=True, min_length=3, strip=True, label='And Breed')
 
 class AddLocation(forms.Form):
-        housenumber = forms.CharField(required=True, min_length=2, label="House Name")
-        street = forms.CharField(required=True, min_length=2, label="Street")
-        pincode = forms.CharField(required=True, min_length=2, label="Pincode")
+        housenumber = forms.CharField(required=True, min_length=2, strip=True, label="House Name")
+        street = forms.CharField(required=True, min_length=2, strip=True, label="Street")
+        pincode = forms.CharField(required=True, min_length=5, max_length=6, strip=True, label="Pincode")
 class AddPet(forms.Form):
-       pet_name=forms.CharField(required=True, min_length=2, label="Name of Pet")
-       age=forms.IntegerField(label="Age of Pet")
+       pet_name=forms.CharField(required=True, min_length=2, strip=True, label="Name of Pet")
+       age=forms.IntegerField(min_value = 0, label="Age of Pet")
        gender = forms.ChoiceField(choices=ch, label='Gender')
-       remarks = forms.CharField(label="Remarks(if any)")
-       disease = forms.CharField(label="Diseases(if any): [Separate using ,]")
-       animal_types = forms.CharField(required=True, min_length=3,label='Animal')
-       animal_breeds = forms.CharField(required=True, min_length=3,label='Breed')
-       
+       remarks = forms.CharField(strip=True, label="Remarks(if any)")
+       disease = forms.CharField(strip=True, label="Diseases(if any): [Separate using ,]")
+       animal_types = forms.CharField(required=True, min_length=3, strip=True, label='Animal')
+       animal_breeds = forms.CharField(required=True, min_length=3, strip=True, label='Breed')
+
+class AddBrand(forms.ModelForm):
+        email = forms.EmailField()
+        rating = forms.FloatField(min_value=1.0)
+        contact = forms.CharField(required=True, strip=True, min_length=10, max_length=13)
+	class Meta:
+		model = brand
+		fields = ['brand_name','rating','email','contact',]
+                

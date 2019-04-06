@@ -143,7 +143,7 @@ def add_pet(request):
                 cursor.execute('SELECT * FROM aio_animal WHERE animal_type = %s AND animal_breed = %s', [animal_types,animal_breeds])
                 result = dictfetchall(cursor)
                 animalid=result[0]['id']
-                cursor.execute('SELECT * FROM aio_location WHERE housenumber = %s AND street = %s AND pincode = %s AND city = %s AND location_state = %s AND country = %s', [housenumber,street,pincode,city,location_state,country])
+                cursor.execute('SELECT * FROM aio_pindata WHERE pincode = %s AND city = %s AND location_state = %s AND country = %s', [housenumber,street,pincode,city,location_state,country])
                 result = dictfetchall(cursor)
                 if result == []:
                     cursor.execute('INSERT INTO `aio_location` (`housenumber`,`street`,`pincode`,`city`,`location_state`,`country`) VALUES ("{}","{}","{}","{}""{}","{}");'.format(housenumber,street,pincode,city,location_state,country))
@@ -166,3 +166,53 @@ def add_pet(request):
 
 
 # Create your views here.
+def add_brand(request):
+    form = AddBrand()
+    form1 = AddLocation()
+    if request.method == 'POST':
+        form = AddItem(request.POST)
+        if form.is_valid() and form1.is_valid():
+            housenumber=str(form1.cleaned_data['housenumber'])
+            street=str(form1.cleaned_data['street'])
+            pincode=str(form1.cleaned_data['pincode'])
+            city=str(form1.cleaned_data['city'])
+            location_state=str(form1.cleaned_data['state'])
+            country=str(form1.cleaned_data['country'])
+
+            brand_name=str(form.cleaned_data['brand_name'])
+            rating=str(form.cleaned_data['rating'])
+            email=str(form.cleaned_data['email'])
+            contact=str(form.cleaned_data['contact'])
+
+            try:
+                cursor = connection.cursor()
+                cursor.execute('SELECT * FROM aio_pindata WHERE pincode = %s', [pincode])
+                result = dictfetchall(cursor)
+                print(result)
+                if result == []:
+                    messages.error(request, f'Pincode not available in our database')
+                    return redirect('addbrand')
+                cursor.execute('SELECT * FROM aio_location WHERE pincode_id = %s', [pincode])
+                result = dictfetchall(cursor)
+                if result == []:
+                    cursor.execute('CALL newLocation("{}","{}","{}")'.format(housenumber,street,pincode))
+                cursor.execute('SELECT * FROM aio_location WHERE pincode_id = %s', [pincode])
+                result = dictfetchall(cursor)
+                locationid=result[0]['id']
+                cursor.execute('INSERT INTO `aio_brand` (`brand_name`,`rating`,`email`,`contact`,`location_id`) VALUES ("{}",{},"{}","{}","{}");'.format(brand_name,rating,email,contact,locationid))
+                connection.commit()
+                print ("Record inserted successfully into aio_brand table")
+                messages.success(request, f'Stock successfully added.')
+                return redirect('home')
+            except mysql.connector.Error as error :
+                connection.rollback() #rollback if any exception occured
+                print("Failed inserting record into aio_brand table {}".format(error))
+    context = {
+	    "form" : form,
+        "form1": form1,
+    }
+    return render(request, "aio/add_brand.html", context)
+
+                
+                
+                

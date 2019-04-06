@@ -13,6 +13,9 @@ class animal(models.Model):
     temperament=models.CharField(max_length=100, null=True)
     class Meta:
         unique_together = (('animal_type', 'animal_breed'))
+    
+    def __str__(self):
+        return "Animal Type : {0} Breed : {1} Lifespan : {2} Height : {3} Weight : {4}".format(self.animal_type, self.animal_breed, self.avglife, self.height, self.weight)
 
 class pindata(models.Model):
     pincode = models.CharField(max_length = 10, primary_key=True)
@@ -20,10 +23,17 @@ class pindata(models.Model):
     state = models.CharField(max_length=20)
     country = models.CharField(max_length=20)
 
+    def __str__(self):
+        return "Pincode : {0} City : {1} State : {2} Country : {3}".format(self.pincode, self.city, self.state, self.country)
+
 class location(models.Model):
     housenumber = models.CharField(max_length=100)
     street = models.CharField(max_length=100)
     pincode = models.ForeignKey(pindata, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "House Number : {0} Street : {1} Pincode : {2}".format(self.housenumber, self.street, self.pincode)
+
 
 #### Profile + Vet ####
 class Profile(models.Model):
@@ -50,6 +60,10 @@ class pet(models.Model):
     photo = models.ImageField(null=True, blank=True)
     adopted = models.BooleanField(default=False)
 
+    def __str__(self):
+        return "Animal Type : {0} Breed : {1} Age : {2} Gender : {3} Adopted : {4}".format(self.animal.animal_type, self.animal.animal_breed, self.age, self.gender, self.adopted)
+
+
 #### Shop tables ####
 class brand(models.Model):
     brand_name=models.CharField(default = "Brand", max_length=100, primary_key = True)
@@ -58,6 +72,10 @@ class brand(models.Model):
     contact=models.CharField(max_length=10, null=True)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
     logo = models.ImageField(null=True, blank=True)
+
+    def __str__(self):
+        return "Brand Name : {0} Rating : {1} Email : {2} Contact : {3}".format(self.brand_name, self.rating, self.email, self.contact)
+
 
 class item(models.Model):
     item_name = models.CharField(max_length=100)
@@ -68,6 +86,10 @@ class item(models.Model):
     rating = models.FloatField(default=0.0)
     brand = models.ForeignKey(brand, on_delete=models.CASCADE)
     photo = models.ImageField(null=True, blank=True)
+
+    def __str__(self):
+        return "Item Name : {0} Item Type : {1} Animal Type : {2} Cost : {3} Brand : {4}".format(self.item_name, self.item_type, self.animal.animal_type, self.cost, self.brand.brand_name)
+
 
 class shelter(models.Model):
     shelter_name = models.CharField(max_length=50)
