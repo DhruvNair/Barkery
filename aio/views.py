@@ -143,11 +143,17 @@ def add_pet(request):
                 cursor.execute('SELECT * FROM aio_animal WHERE animal_type = %s AND animal_breed = %s', [animal_types,animal_breeds])
                 result = dictfetchall(cursor)
                 animalid=result[0]['id']
-                cursor.execute('SELECT * FROM aio_pindata WHERE pincode = %s AND city = %s AND location_state = %s AND country = %s', [housenumber,street,pincode,city,location_state,country])
+                cursor.execute('SELECT * FROM aio_pindata WHERE pincode = %s', [pincode])
+                result = dictfetchall(cursor)
+                print(result)
+                if result == []:
+                    messages.error(request, f'Pincode not available in our database')
+                    return redirect('addpet')
+                cursor.execute('SELECT * FROM aio_location WHERE pincode_id = %s', [pincode])
                 result = dictfetchall(cursor)
                 if result == []:
-                    cursor.execute('INSERT INTO `aio_location` (`housenumber`,`street`,`pincode`,`city`,`location_state`,`country`) VALUES ("{}","{}","{}","{}""{}","{}");'.format(housenumber,street,pincode,city,location_state,country))
-                cursor.execute('SELECT * FROM aio_location WHERE housenumber = %s AND street = %s AND pincode = %s AND city = %s AND location_state = %s AND country = %s', [housenumber,street,pincode,city,location_state,country])
+                    cursor.execute('CALL newLocation("{}","{}","{}")'.format(housenumber,street,pincode))
+                cursor.execute('SELECT * FROM aio_location WHERE pincode_id = %s', [pincode])
                 result = dictfetchall(cursor)
                 locationid=result[0]['id']
                 cursor.execute('INSERT INTO `aio_pet` (`pet_name`,`age`,`gender`,`remarks`,`disease`,`animal_id`,`location_id`) VALUES ("{}",{},"{}","{}","{}",{},{});'.format(pet_name,age,gender,remarks,disease,animalid,locationid))
