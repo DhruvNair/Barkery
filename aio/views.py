@@ -234,7 +234,7 @@ def adopt_animal(request):
             animals[x]=result[x]['animal_type']
     except mysql.connector.Error as error :
         connection.rollback() #rollback if any exception occured
-    context = {"listanimal": animals}
+    context = {"animals": animals}
     return render(request, "aio/adopthome.html", context)
 
 def filter(request, animal_names):
