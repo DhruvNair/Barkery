@@ -86,7 +86,6 @@ class pet(models.Model):
     color = models.CharField(max_length=100, blank=False, null=True)
     spayneuter = models.CharField(max_length=10, choices=(('Yes','Yes'),('No','No')), blank=False, null=True)
     coatlength = models.CharField(max_length=10, choices=(('Hairless','Hairless'),('Short','Short'),('Medium','Medium'),('Long','Long'),('Wire','Wire'),('Curly','Curly')), blank=False, null=True)
-    location = models.ForeignKey(location, on_delete=models.CASCADE)
     disease=models.CharField(max_length=100, null=True)
     user = models.ForeignKey(Profile,null=True, on_delete=models.CASCADE)
     photo = models.ForeignKey(pictures, on_delete=models.DO_NOTHING)
