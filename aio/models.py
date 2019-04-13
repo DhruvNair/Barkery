@@ -9,7 +9,7 @@ from django.core.validators import MinLengthValidator, MinValueValidator, MaxVal
 class animal(models.Model):
     animal_type=models.CharField(max_length=100)
     animal_breed=models.CharField(max_length=100)
-    avglife=models.IntegerField(default=0)
+    avglife=models.IntegerField(default=0, verbose_name="Average Life")
     color=models.CharField(max_length=1000, null=True)
     temperament=models.CharField(max_length=100, null=True)
     class Meta:
@@ -56,8 +56,12 @@ class Profile(models.Model):
     photo = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='profile_pics')
     address = models.ForeignKey(location, on_delete=models.CASCADE, null=True)
     phone = models.CharField(validators=[MinLengthValidator(10)],max_length=13,blank=False,null=True)
-    numberofchildren = models.IntegerField(validators=[MinValueValidator(0)],default=0)
-    animalpreferences = models.CharField(max_length = 100,blank=False, null=True)
+    numberofchildren = models.IntegerField(validators=[MinValueValidator(0)],default=0,verbose_name="Number Of Children")
+    animalpreferences = models.CharField(max_length = 100,blank=False, null=True, verbose_name="Animal Preferences")
+    
+    class Meta:
+        verbose_name="User Profile"
+        verbose_name_plural="Profiles"
     def __str__(self):
     		return f'{self.user.username} Profile'
 
@@ -70,7 +74,7 @@ class vet(models.Model):
 class adoptiondetails(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     adopted = models.BooleanField(default=False)
-    dateofadoption = models.DateField(null=True, default=timezone.now)
+    dateofadoption = models.DateField(null=True, default=timezone.now, verbose_name="Date Of Adoption")
     def __str__(self):
         return "User : {0} Adopted : {1} Date of Adoption : {2}".format(self.profile.user.username, self.adopted, self.dateofadoption)
 
@@ -78,14 +82,14 @@ class adoptiondetails(models.Model):
 
 class pet(models.Model):
     animal = models.ForeignKey(animal, on_delete=models.CASCADE)
-    pet_name = models.CharField(default= "Tommy", max_length=20)
+    pet_name = models.CharField(default= "Tommy", max_length=20,verbose_name="Pet Name")
     age = models.IntegerField(default=0)
     gender = models.CharField(max_length=10,choices=(('M','Male'),('F','Female')),blank=False)
     remarks = models.CharField(max_length=100, null=True)
     onbarkerysince=models.DateTimeField(default=timezone.now)
     color = models.CharField(max_length=100, blank=False, null=True)
-    spayneuter = models.CharField(max_length=10, choices=(('Yes','Yes'),('No','No')), blank=False, null=True)
-    coatlength = models.CharField(max_length=10, choices=(('Hairless','Hairless'),('Short','Short'),('Medium','Medium'),('Long','Long'),('Wire','Wire'),('Curly','Curly')), blank=False, null=True)
+    spayneuter = models.CharField(max_length=10, choices=(('Yes','Yes'),('No','No')), blank=False, null=True, verbose_name="Is it Spayed/Neutered?")
+    coatlength = models.CharField(max_length=10, choices=(('Hairless','Hairless'),('Short','Short'),('Medium','Medium'),('Long','Long'),('Wire','Wire'),('Curly','Curly')), blank=False, null=True,verbose_name="Coat Length")
     disease=models.CharField(max_length=100, null=True)
     user = models.ForeignKey(Profile,null=True, on_delete=models.CASCADE)
     photo = models.ForeignKey(pictures, on_delete=models.DO_NOTHING)
@@ -113,9 +117,9 @@ class brand(models.Model):
 
 
 class item(models.Model):
-    item_name = models.CharField(max_length=100)
+    item_name = models.CharField(max_length=100, verbose_name="Item Name")
     animal = models.ForeignKey(animal, on_delete=models.CASCADE)
-    item_type = models.CharField(max_length=100)
+    item_type = models.CharField(max_length=100, verbose_name="Item Type")
     description = models.CharField(max_length=100)
     cost = models.FloatField(default=0.0)
     rating = models.FloatField(default=0.0)
@@ -131,6 +135,6 @@ class shelter(models.Model):
     location = models.ForeignKey(location, on_delete=models.CASCADE)
     animals = models.CharField(max_length=100)
     logo = models.ImageField(null=True, blank=True)
-    stray = models.IntegerField(default=0, validators = [MinValueValidator(0)])
+    stray = models.IntegerField(default=0, validators = [MinValueValidator(0)],verbose_name="How Many Strays")
     email=models.CharField(max_length=100, null=True)
     contact=models.CharField(max_length=10, null=True)
