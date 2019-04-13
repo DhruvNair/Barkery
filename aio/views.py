@@ -18,8 +18,22 @@ from django.contrib.auth.decorators import login_required
 
 def display_home(request):
     #reviews,No. of adopted, no. of strays, No. of shelters, No. of vets,
-    #adoptedset=adoptiondetails.objects.filter(adopted=True).order_by(-'dateofadoption')
-    return render(request, 'aio/index.html')
+    adoptedset=adoptiondetails.objects.filter(adopted=True).order_by(-'dateofadoption')
+    adoptedset=adoptedset[:7]
+    strayset=shelter.objects.all()
+    countstray=0
+    countshelters=0
+    for strays in strayset:
+        countstray+=strayset.stray
+    countshelters=len(strayset)
+    vetty=vet.objects.all()
+    countvet=len(vetty)
+    otdict = {'straynumber':countstray,'shelternumber':countshelters,'vetnumbers':countvet}
+    context = {'adoptedset':adoptedset,
+        'info':otdict,
+    }
+    
+    return render(request, 'aio/index.html', context)
 
 
 def register(request):
