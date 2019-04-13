@@ -15,9 +15,17 @@
     </div>
 </section>
 <section>
+    <center>
     {% if animals %}
+        <select id="Type Selection" style="width:30vw;minwidth : 30px;">
         {% for animal in animals %}
-
+            <option value="{{animal}}">{{animal}}</option>
+        {% endfor %}
+        </select>
+    {% else %}
+        <p>Our Database seems to be empty : ( Try again later?</p>
+    {% endif %}
+    </center>
 </section>
 
 

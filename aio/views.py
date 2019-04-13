@@ -227,11 +227,11 @@ def add_brand(request):
 def adopt_animal(request):
     try:
         cursor = connection.cursor()
-        cursor.execute('SELECT animal_type FROM aio_animal')
+        cursor.execute('SELECT distinct animal_type FROM aio_animal')
         result = dictfetchall(cursor)
         animals=[]
         for x in range(len(result)):
-            animals[x]=result[x]['animal_type']
+            animals.append(result[x]['animal_type'])
     except mysql.connector.Error as error :
         connection.rollback() #rollback if any exception occured
     context = {"animals": animals}
@@ -248,7 +248,7 @@ def filter(request, animal_names):
             result[x]['daysonbarkery']=now-result[x]['daysonbarkery']
     except mysql.connector.Error as error :
         connection.rollback() #rollback if any exception occured
-    context = {"pet": result}
+    context = {"pets": result}
     return render(request, "aio/adopt.html", context)
 def shop(request):
     context = {}
