@@ -45,7 +45,28 @@ def profile(request):
         if u_form.is_valid() and p_form.is_valid() and a_form.is_valid():
             u_form.save()
             p_form.save()
-            a_form.save()
+            housenumber = str(a_form.cleaned_data['housenumber'])
+            street = str(a_form.cleaned_data['street'])
+            pincode = str(a_form.cleaned_data['pincode'])
+            try:
+                cursor = connection.cursor()
+                cursor.execute(
+                    'SELECT * FROM aio_pindata WHERE pincode = %s', [pincode])
+                result = dictfetchall(cursor)
+                print(result)
+                if result == []:
+                    messages.error(
+                        request, f'Pincode not available in our database')
+                return redirect('profile')
+                cursor.execute('CALL newLocation("{}","{}","{}")'.format(
+                    housenumber, street, pincode))
+                connection.commit()
+                print("Record inserted successfully into aio_location table")
+                messages.success(request, f'Location successfully added.')
+                return redirect('home')
+            except mysql.connector.Error as error:
+                connection.rollback()  # rollback if any exception occured
+                print("Failed inserting record into aio_animals table {}".format(error))
             messages.success(request, f'Your account has been updated.')
             return redirect('profile')
     else:
