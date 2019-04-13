@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth.models import User
 from PIL import Image
+from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
 
 #### Pet Adoption tables ####
 class animal(models.Model):
@@ -48,23 +49,17 @@ class pictures(models.Model):
 
 
 
-
 #### Profile + Vet ####
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     photo = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='profile_pics')
-    address = models.ForeignKey(location, on_delete=models.CASCADE)
-    phone = models.CharField(min_length=10,max_length=13,blank=False)
-    numberofchildren = models.IntegerField(min_value=0,default=0)
-    animalpreferences = models.CharField(max_value=100,blank=False)
-    comments = models.ForeignKey(comments)
+    address = models.ForeignKey(location, on_delete=models.CASCADE, null=True)
+    phone = models.CharField(validators=[MinLengthValidator(10)],max_length=13,blank=False,null=True)
+    numberofchildren = models.IntegerField(validators=[MinValueValidator(0)],default=0)
+    animalpreferences = models.CharField(max_length = 100,blank=False, null=True)
     def __str__(self):
     		return f'{self.user.username} Profile'
-
-class comments(models.Model):
-    comments = model.CharField(max_value=100)
-    pet = model.ForeignKey(pet, on_delete=models.CASCADE)
 
 class vet(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -72,36 +67,37 @@ class vet(models.Model):
     address = models.ForeignKey(location, on_delete=models.CASCADE)
     verified = models.BooleanField(default=False)
     
+class adoptiondetails(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    adopted = models.BooleanField(default=False)
+    dateofadoption = models.DateField(null=True, default=timezone.now)
+    def __str__(self):
+        return "User : {0} Adopted : {1} Date of Adoption : {2}".format(self.profile.user.username, self.adopted, self.dateofadoption)
+
+
 
 class pet(models.Model):
-
     animal = models.ForeignKey(animal, on_delete=models.CASCADE)
     pet_name = models.CharField(default= "Tommy", max_length=20)
     age = models.IntegerField(default=0)
     gender = models.CharField(max_length=10,choices=(('M','Male'),('F','Female')),blank=False)
     remarks = models.CharField(max_length=100, null=True)
     onbarkerysince=models.DateTimeField(default=timezone.now)
-    color = models.CharField(max_length=100, blank=False)
-    spayneuter = models.CharField(max_length=10, choices=(('Yes','Yes'),('No','No')), blank=False)
-    coatlength = models.CharField(max_length=10, choices=(('Hairless','Hairless'),('Short','Short'),('Medium','Medium'),('Long','Long'),('Wire','Wire'),('Curly','Curly')), blank=False)
+    color = models.CharField(max_length=100, blank=False, null=True)
+    spayneuter = models.CharField(max_length=10, choices=(('Yes','Yes'),('No','No')), blank=False, null=True)
+    coatlength = models.CharField(max_length=10, choices=(('Hairless','Hairless'),('Short','Short'),('Medium','Medium'),('Long','Long'),('Wire','Wire'),('Curly','Curly')), blank=False, null=True)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
     disease=models.CharField(max_length=100, null=True)
     user = models.ForeignKey(Profile,null=True, on_delete=models.CASCADE)
-    photo = models.ForeignKey(pictures)
-    adopt = models.ForeignKey(adoptiondetails)
+    photo = models.ForeignKey(pictures, on_delete=models.DO_NOTHING)
+    adopt = models.ForeignKey(adoptiondetails, on_delete=models.DO_NOTHING, null=True)
+    comments = models.CharField(max_length = 100, null=True, blank=False)
     height=models.FloatField(default=0.0)
     weight=models.FloatField(default=0.0)
 
     def __str__(self):
         return "Animal Type : {0} Breed : {1} Age : {2} Gender : {3} Adopted : {4}".format(self.animal.animal_type, self.animal.animal_breed, self.age, self.gender, self.adopted)
 
-
-class adoptiondetails(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    adopted = models.BooleanField(default=False)
-    dateofadoption = models.DateField(null=True)
-    def __str__(self):
-        return "User : {0} Adopted : {1} Date of Adoption : {2}".format(self.profile.user.username, self.adopted, self.dateofadoption)
 
 
 #### Shop tables ####
@@ -136,5 +132,4 @@ class shelter(models.Model):
     location = models.ForeignKey(location, on_delete=models.CASCADE)
     animals = models.CharField(max_length=100)
     logo = models.ImageField(null=True, blank=True)
-    stray = models.CharField(max_length=10, choices=(('Yes','Yes'),('No','No')), blank=False)
-
+    stray = models.IntegerField(default=0, validators = [MinValueValidator(0)])
