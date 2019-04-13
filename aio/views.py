@@ -37,13 +37,11 @@ def add_animal(request):
             animal_type=str(form.cleaned_data['animal_type'])
             animal_breed=str(form.cleaned_data['animal_breed'])
             avglife=int(form.cleaned_data['avglife'])
-            height=float(form.cleaned_data['height'])
-            weight=float(form.cleaned_data['weight'])
             color=str(form.cleaned_data['color'])
             temperament=str(form.cleaned_data['temperament'])
             try:
                 cursor = connection.cursor()
-                cursor.execute('INSERT INTO `aio_animal` (`animal_type`,`animal_breed`,`avglife`,`height`,`weight`,`color`,`temperament`) VALUES ("{}","{}",{},{},{},"{}","{}");'.format(animal_type,animal_breed,avglife,height,weight,color,temperament))
+                cursor.execute('INSERT INTO `aio_animal` (`animal_type`,`animal_breed`,`avglife`,`color`,`temperament`) VALUES ("{}","{}",{},{},{},"{}","{}");'.format(animal_type,animal_breed,avglife,color,temperament))
                 connection.commit()
                 print ("Record inserted successfully into aio_animals table")
                 messages.success(request, f'Stock successfully added.')
@@ -133,6 +131,8 @@ def add_pet(request):
             disease=str(form.cleaned_data['disease'])
             animal_types=str(form.cleaned_data['animal_types'])
             animal_breeds=str(form.cleaned_data['animal_breeds'])
+            height=float(form.cleaned_data['height'])
+            weight=float(form.cleaned_data['weight'])
 
             housenumber=str(form1.cleaned_data['housenumber'])
             street=str(form1.cleaned_data['street'])
@@ -159,7 +159,7 @@ def add_pet(request):
                 cursor.execute('SELECT * FROM aio_location WHERE pincode_id = %s', [pincode])
                 result = dictfetchall(cursor)
                 locationid=result[0]['id']
-                cursor.execute('INSERT INTO `aio_pet` (`pet_name`,`age`,`gender`,`remarks`,`disease`,`animal_id`,`location_id`) VALUES ("{}",{},"{}","{}","{}",{},{});'.format(pet_name,age,gender,remarks,disease,animalid,locationid))
+                cursor.execute('INSERT INTO `aio_pet` (`pet_name`,`age`,`gender`,`remarks`,`disease`,`animal_id`,`location_id`,`height`,`weight`) VALUES ("{}",{},"{}","{}","{}",{},{},{},{});'.format(pet_name,age,gender,remarks,disease,animalid,locationid,height,weight))
                 connection.commit()
                 print ("Record inserted successfully into aio_pet table")
                 messages.success(request, f'Stock successfully added.')

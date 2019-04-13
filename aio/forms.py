@@ -25,8 +25,6 @@ class AddAnimal(forms.Form):
         animal_type = forms.ChoiceField(choices=animal_choices, label='Type of Animal')
         animal_breed = forms.CharField(required=True, min_length=3, strip=True, label='And Breed')
         avglife = forms.IntegerField(min_value=1, label="Average Life")
-        height = forms.FloatField(min_value = 0.1, label = "Height")
-        weight = forms.FloatField(min_value = 0.1, label = "Weight")
         color = forms.CharField(required=True, min_length=3, strip=True, label='Colors Available')
         temperament = forms.CharField(required=True, min_length=3, strip=True, label='General Temperament')
 
@@ -46,13 +44,15 @@ class AddLocation(forms.Form):
         street = forms.CharField(required=True, min_length=2, strip=True, label="Street")
         pincode = forms.CharField(required=True, min_length=5, max_length=6, strip=True, label="Pincode")
 class AddPet(forms.Form):
-       pet_name=forms.CharField(required=True, min_length=2, strip=True, label="Name of Pet")
-       age=forms.IntegerField(min_value = 0, label="Age of Pet")
-       gender = forms.ChoiceField(choices=ch, label='Gender')
-       remarks = forms.CharField(strip=True, label="Remarks(if any)")
-       disease = forms.CharField(strip=True, label="Diseases(if any): [Separate using ,]")
-       animal_types = forms.CharField(required=True, min_length=3, strip=True, label='Animal')
-       animal_breeds = forms.CharField(required=True, min_length=3, strip=True, label='Breed')
+        pet_name=forms.CharField(required=True, min_length=2, strip=True, label="Name of Pet")
+        age=forms.IntegerField(min_value = 0, label="Age of Pet")
+        gender = forms.ChoiceField(choices=ch, label='Gender')
+        remarks = forms.CharField(strip=True, label="Remarks(if any)")
+        disease = forms.CharField(strip=True, label="Diseases(if any): [Separate using ,]")
+        animal_types = forms.CharField(required=True, min_length=3, strip=True, label='Animal')
+        animal_breeds = forms.CharField(required=True, min_length=3, strip=True, label='Breed')
+        height = forms.FloatField(min_value = 0.1, label = "Height")
+        weight = forms.FloatField(min_value = 0.1, label = "Weight")
 
 class AddBrand(forms.ModelForm):
         email = forms.EmailField()

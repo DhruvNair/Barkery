@@ -1,15 +1,15 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.auth.models import User
+from PIL import Image
 
 #### Pet Adoption tables ####
 class animal(models.Model):
     animal_type=models.CharField(max_length=100)
     animal_breed=models.CharField(max_length=100)
     avglife=models.IntegerField(default=0)
-    height=models.FloatField(default=0.0)
-    weight=models.FloatField(default=0.0)
-    color=models.CharField(max_length=100, null=True)
+    color=models.CharField(max_length=1000, null=True)
     temperament=models.CharField(max_length=100, null=True)
     class Meta:
         unique_together = (('animal_type', 'animal_breed'))
@@ -34,34 +34,74 @@ class location(models.Model):
     def __str__(self):
         return "House Number : {0} Street : {1} Pincode : {2}".format(self.housenumber, self.street, self.pincode)
 
+class pictures(models.Model):
+    photo1 = models.ImageField(blank=False, default='default.jpg', upload_to='pics')
+    photo2 = models.ImageField(blank=False,default='default.jpg', upload_to='pics')
+    photo3 = models.ImageField(blank=False,default='default.jpg', upload_to='pics')
+    photo4 = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
+    photo5 = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
+    photo6 = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
+    photo7 = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
+    photo8 = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
+    photo9 = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
+    photo10= models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
+
+
+
 
 #### Profile + Vet ####
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
-    photo = models.ImageField(null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='profile_pics')
+    address = models.ForeignKey(location, on_delete=models.CASCADE)
+    phone = models.CharField(min_length=10,max_length=13,blank=False)
+    numberofchildren = models.IntegerField(min_value=0,default=0)
+    animalpreferences = models.CharField(max_value=100,blank=False)
+    comments = models.ForeignKey(comments)
+    def __str__(self):
+    		return f'{self.user.username} Profile'
+
+class comments(models.Model):
+    comments = model.CharField(max_value=100)
+    pet = model.ForeignKey(pet, on_delete=models.CASCADE)
 
 class vet(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     specialization = models.CharField(max_length=100)
-    location = models.ForeignKey(location, on_delete=models.CASCADE)
+    address = models.ForeignKey(location, on_delete=models.CASCADE)
     verified = models.BooleanField(default=False)
+    
 
 class pet(models.Model):
+
     animal = models.ForeignKey(animal, on_delete=models.CASCADE)
     pet_name = models.CharField(default= "Tommy", max_length=20)
     age = models.IntegerField(default=0)
     gender = models.CharField(max_length=10,choices=(('M','Male'),('F','Female')),blank=False)
     remarks = models.CharField(max_length=100, null=True)
     onbarkerysince=models.DateTimeField(default=timezone.now)
+    color = models.CharField(max_length=100, blank=False)
+    spayneuter = models.CharField(max_length=10, choices=(('Yes','Yes'),('No','No')), blank=False)
+    coatlength = models.CharField(max_length=10, choices=(('Hairless','Hairless'),('Short','Short'),('Medium','Medium'),('Long','Long'),('Wire','Wire'),('Curly','Curly')), blank=False)
     location = models.ForeignKey(location, on_delete=models.CASCADE)
     disease=models.CharField(max_length=100, null=True)
     user = models.ForeignKey(Profile,null=True, on_delete=models.CASCADE)
-    photo = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pet_pics')
-    adopted = models.BooleanField(default=False)
+    photo = models.ForeignKey(pictures)
+    adopt = models.ForeignKey(adoptiondetails)
+    height=models.FloatField(default=0.0)
+    weight=models.FloatField(default=0.0)
 
     def __str__(self):
         return "Animal Type : {0} Breed : {1} Age : {2} Gender : {3} Adopted : {4}".format(self.animal.animal_type, self.animal.animal_breed, self.age, self.gender, self.adopted)
+
+
+class adoptiondetails(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    adopted = models.BooleanField(default=False)
+    dateofadoption = models.DateField(null=True)
+    def __str__(self):
+        return "User : {0} Adopted : {1} Date of Adoption : {2}".format(self.profile.user.username, self.adopted, self.dateofadoption)
 
 
 #### Shop tables ####
@@ -96,3 +136,5 @@ class shelter(models.Model):
     location = models.ForeignKey(location, on_delete=models.CASCADE)
     animals = models.CharField(max_length=100)
     logo = models.ImageField(null=True, blank=True)
+    stray = models.CharField(max_length=10, choices=(('Yes','Yes'),('No','No')), blank=False)
+
