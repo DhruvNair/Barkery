@@ -17,6 +17,8 @@ from django.contrib.auth.decorators import login_required
 
 
 def display_home(request):
+    #reviews,No. of adopted, no. of strays, No. of shelters, No. of vets,
+    adoptedset=adoptiondetails.objects.filter(adopted=True).order_by(-'dateofadoption')
     return render(request, 'aio/index.html')
 
 
@@ -339,5 +341,6 @@ def shelters(request):
 
 
 def about(request):
+    
     context = {}
     return render(request, "aio/about.html", context)

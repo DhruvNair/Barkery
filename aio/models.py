@@ -75,6 +75,7 @@ class adoptiondetails(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     adopted = models.BooleanField(default=False)
     dateofadoption = models.DateField(null=True, default=timezone.now, verbose_name="Date Of Adoption")
+    comments = models.CharField(max_length = 100, null=True, blank=False)
     def __str__(self):
         return "User : {0} Adopted : {1} Date of Adoption : {2}".format(self.profile.user.username, self.adopted, self.dateofadoption)
 
@@ -94,7 +95,6 @@ class pet(models.Model):
     user = models.ForeignKey(Profile,null=True, on_delete=models.CASCADE)
     photo = models.ForeignKey(pictures, on_delete=models.DO_NOTHING)
     adopt = models.ForeignKey(adoptiondetails, on_delete=models.DO_NOTHING, null=True)
-    comments = models.CharField(max_length = 100, null=True, blank=False)
     height=models.FloatField(default=0.0)
     weight=models.FloatField(default=0.0)
 
