@@ -3,6 +3,9 @@ from .models import *
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from django.contrib.auth.decorators import login_required
 
 choices=(('Accessory&Clothing','Accessory&Clothing'),
         ('Food Items','Food Items'),

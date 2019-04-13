@@ -11,6 +11,9 @@ import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
 from django.utils import timezone
+from django.contrib import messages
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from django.contrib.auth.decorators import login_required
 
 def display_home(request):
     return render(request, 'aio/index.html')
