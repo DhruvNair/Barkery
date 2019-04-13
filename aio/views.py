@@ -10,6 +10,7 @@ from .forms import *
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
+from django.utils import timezone
 
 def display_home(request):
     return render(request, 'aio/home.html')
@@ -21,6 +22,7 @@ def namedtuplefetchall(cursor):
     return [nt_result(*row) for row in cursor.fetchall()]
 
 def dictfetchall(cursor):
+    row=0
     columns = [col[0] for col in cursor.description]
     return [
         dict(zip(columns, row))
@@ -222,8 +224,31 @@ def add_brand(request):
     }
     return render(request, "aio/add_brand.html", context)
 
-def adopt(request):
-    context = {}
+def adopt_animal(request):
+    try:
+        cursor = connection.cursor()
+        cursor.execute('SELECT animal_type FROM animal')
+        result = dictfetchall(cursor)
+        animals=[]
+        for x in range(len(result)):
+            animals[x]=result[x]['animal_type']
+    except mysql.connector.Error as error :
+        connection.rollback() #rollback if any exception occured
+    context = {"listanimal": animals}
+    return render(request, "aio/adoptanimal.html", context)
+
+def filter(request, animal_names):
+    try:
+        cursor = connection.cursor()
+        #Need Coat length, 
+        cursor.execute('SELECT animal.animal_breed as breed,pet_name,age,gender,onbarkerysince as daysonbarkery FROM pet WHERE animal.animal_type = animal_names and adopted = False')
+        result = dictfetchall(cursor)
+        for x in range(len(result)):
+            now=timezone.now
+            result[x]['daysonbarkery']=now-result[x]['daysonbarkery']
+    except mysql.connector.Error as error :
+        connection.rollback() #rollback if any exception occured
+    context = {"pet": result}
     return render(request, "aio/adopt.html", context)
 def shop(request):
     context = {}
