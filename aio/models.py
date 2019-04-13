@@ -120,7 +120,7 @@ class item(models.Model):
     cost = models.FloatField(default=0.0)
     rating = models.FloatField(default=0.0)
     brand = models.ForeignKey(brand, on_delete=models.CASCADE)
-    photo = models.ImageField(null=True, blank=True)
+    photo = models.ForeignKey(pictures, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return "Item Name : {0} Item Type : {1} Animal Type : {2} Cost : {3} Brand : {4}".format(self.item_name, self.item_type, self.animal.animal_type, self.cost, self.brand.brand_name)
@@ -132,3 +132,5 @@ class shelter(models.Model):
     animals = models.CharField(max_length=100)
     logo = models.ImageField(null=True, blank=True)
     stray = models.IntegerField(default=0, validators = [MinValueValidator(0)])
+    email=models.CharField(max_length=100, null=True)
+    contact=models.CharField(max_length=10, null=True)
