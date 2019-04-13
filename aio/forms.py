@@ -58,7 +58,7 @@ class AddBrand(forms.ModelForm):
         email = forms.EmailField()
         rating = forms.FloatField(min_value=1.0)
         contact = forms.CharField(required=True, strip=True, min_length=10, max_length=13)
-	class Meta:
-		model = brand
-		fields = ['brand_name','rating','email','contact',]                     #'logo'
+        class Meta:
+                model = brand
+                fields = ['brand_name','rating','email','contact',]                     #'logo'
                 

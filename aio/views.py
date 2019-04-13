@@ -222,6 +222,18 @@ def add_brand(request):
     }
     return render(request, "aio/add_brand.html", context)
 
-                
-                
-                
+def adopt(request):
+    context = {}
+    return render(request, "aio/adopt.html", context)
+def shop(request):
+    context = {}
+    return render(request, "aio/shop.html", context)
+def vets(request):
+    context = {}
+    return render(request, "aio/vets.html", context)
+def shelters(request):
+    context = {}
+    return render(request, "aio/shelters.html", context)
+def about(request):
+    context = {}
+    return render(request, "aio/about.html", context)
