@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 
 def display_home(request):
     #reviews,No. of adopted, no. of strays, No. of shelters, No. of vets,
-    adoptedset=adoptiondetails.objects.filter(adopted=True).order_by(-'dateofadoption')
+    #adoptedset=adoptiondetails.objects.filter(adopted=True).order_by(-'dateofadoption')
     return render(request, 'aio/index.html')
 
 
@@ -57,7 +57,7 @@ def profile(request):
                 if result == []:
                     messages.error(
                         request, f'Pincode not available in our database')
-                return redirect('profile')
+                    return redirect('profile')
                 cursor.execute('CALL newLocation("{}","{}","{}")'.format(
                     housenumber, street, pincode))
                 connection.commit()
