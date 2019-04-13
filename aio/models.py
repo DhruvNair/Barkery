@@ -20,9 +20,9 @@ class animal(models.Model):
 
 class pindata(models.Model):
     pincode = models.CharField(max_length = 10, primary_key=True)
-    city = models.CharField(max_length = 20)
-    state = models.CharField(max_length=20)
-    country = models.CharField(max_length=20)
+    city = models.CharField(max_length = 100)
+    state = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
 
     def __str__(self):
         return "Pincode : {0} City : {1} State : {2} Country : {3}".format(self.pincode, self.city, self.state, self.country)
@@ -46,7 +46,6 @@ class pictures(models.Model):
     photo8 = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
     photo9 = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
     photo10= models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
-
 
 
 #### Profile + Vet ####
