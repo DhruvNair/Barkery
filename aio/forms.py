@@ -61,6 +61,14 @@ class AddAnimal(forms.Form):
         required=True, min_length=3, strip=True, label='General Temperament')
 
 
+
+class AddMultipleImages(forms.ModelForm):
+    photo1 = forms.ImageField(label='Image')    
+    class Meta:
+        model = pictures
+        fields = ['photo1']
+
+
 class AddItem(forms.Form):
     name = forms.CharField(required=True, min_length=3,
                            strip=True, label='Name of Item')

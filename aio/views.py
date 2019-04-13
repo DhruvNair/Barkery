@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import animal
+from .models import *
 from django.utils.timezone import utc
 from django.utils import timezone
 from django.contrib import messages
@@ -14,13 +14,19 @@ from django.utils import timezone
 from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
+from .filters import PetFilter
 
-
+pics=['photo1','photo2','photo3','photo4','photo5','photo6','photo7','photo8','photo9','photo10']
 def display_home(request):
     #reviews,No. of adopted, no. of strays, No. of shelters, No. of vets,
     adoptedset=adoptiondetails.objects.filter(adopted=True).order_by(-'dateofadoption')
     adoptedset=adoptedset[:7]
+    petset=[]
+    for adopted in adoptedset:
+        pett=pet.objects.get(adopt=adopted)
+        petset.append(pett)
     strayset=shelter.objects.all()
+
     countstray=0
     countshelters=0
     for strays in strayset:
@@ -29,7 +35,7 @@ def display_home(request):
     vetty=vet.objects.all()
     countvet=len(vetty)
     otdict = {'straynumber':countstray,'shelternumber':countshelters,'vetnumbers':countvet}
-    context = {'adoptedset':adoptedset,
+    context = {'adoptedset':adoptedset,'petset':petset,
         'info':otdict,
     }
     
@@ -139,11 +145,25 @@ def add_animal(request):
     return render(request, "aio/add_item.html", context)
 
 
+#def AdoptAPet(request):
+
+
+
+
+
+
+
+
 def add_item(request):
+    ImageFormSet = modelformset_factory(pictures,
+                                        form=AddMultipleImages, extra=9)
     form = AddItem()
+    formset = AddMultipleImagesSet(queryset=pictures.objects.none())
+    
     if request.method == 'POST':
         form = AddItem(request.POST)
-        if form.is_valid():
+        formset = AddMultipleImagesSet(request.POST,request.FILES,queryset=pictures.objects.none())
+        if form.is_valid() and formset.is_valid():
             item_name = str(form.cleaned_data['name'])
             item_type = str(form.cleaned_data['type'])
             description = str(form.cleaned_data['description'])
@@ -165,6 +185,21 @@ def add_item(request):
                 cursor.execute('INSERT INTO `aio_item` (`item_name`,`item_type`,`description`,`cost`,`rating`,`animal_id`,`brand_id`) VALUES ("{}","{}","{}",{},{},{},"{}");'.format(
                     item_name, item_type, description, cost, rating, animalid, brandid))
                 connection.commit()
+                count=0
+                images1=[]
+                for form in formset.cleaned_data:
+                    if form:
+                        image = form['photo1']
+                        images1.append = image
+                if len(images1)<10:
+                    for x in range(len(images1),10):
+                        images1.append(None)
+                photo = Pictures(photo1=images1[0],photo2=images1[1],photo3=images1[2],photo4=images1[3],photo5=images1[4],photo6=images1[5],photo7=images1[6],photo8=images1[7],photo9=images1[8],photo10=images1[9])
+                photo.save()
+                Animal = animal.objects.get(animal_type=animal_types,animal_breed=animal_breeds)
+                brand = brand.objects.get(brand_name=brand)
+                FC=item.objects.get(item_name=item_name,item_type=item_type,description=description,cost=cost,rating=rating,animal=Animal, brand=brand)
+                FC.photo=photo
                 print("Record inserted successfully into aio_items table")
                 messages.success(request, f'Stock successfully added.')
                 return redirect('home')

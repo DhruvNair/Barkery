@@ -37,8 +37,8 @@ class location(models.Model):
 
 class pictures(models.Model):
     photo1 = models.ImageField(blank=False, default='default.jpg', upload_to='pics')
-    photo2 = models.ImageField(blank=False,default='default.jpg', upload_to='pics')
-    photo3 = models.ImageField(blank=False,default='default.jpg', upload_to='pics')
+    photo2 = models.ImageField(null=True,default='default.jpg', upload_to='pics')
+    photo3 = models.ImageField(null=True,default='default.jpg', upload_to='pics')
     photo4 = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
     photo5 = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
     photo6 = models.ImageField(null=True, blank=True, default='default.jpg', upload_to='pics')
