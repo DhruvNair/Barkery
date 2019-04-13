@@ -1,6 +1,8 @@
 from django import forms
 from .models import *
 from django.utils import timezone
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 choices=(('Accessory&Clothing','Accessory&Clothing'),
         ('Food Items','Food Items'),
@@ -21,6 +23,30 @@ animal_choices = (('Dog','Dog'),
 ch=(('M','Male'),
 ('F','Female'),
 )
+
+choices12=(('Hairless','Hairless'),('Short','Short'),('Medium','Medium'),('Long','Long'),('Wire','Wire'),('Curly','Curly'))
+
+class UserRegisterForm(UserCreationForm):
+    	email = forms.EmailField()
+
+	class Meta:
+		model = User
+		fields = ['first_name','last_name','username', 'email', 'password1', 'password2']
+
+
+class UserUpdateForm(forms.ModelForm):
+    	email = forms.EmailField()
+
+	class Meta:
+		model = User
+		fields = ['username', 'email']
+
+
+class ProfileUpdateForm(forms.ModelForm):
+	class Meta:
+		model = Profile
+		fields = ['image','bio','phone','numberofchildren','animalpreferences']
+
 class AddAnimal(forms.Form):
         animal_type = forms.ChoiceField(choices=animal_choices, label='Type of Animal')
         animal_breed = forms.CharField(required=True, min_length=3, strip=True, label='And Breed')
@@ -53,6 +79,10 @@ class AddPet(forms.Form):
         animal_breeds = forms.CharField(required=True, min_length=3, strip=True, label='Breed')
         height = forms.FloatField(min_value = 0.1, label = "Height")
         weight = forms.FloatField(min_value = 0.1, label = "Weight")
+        coatlength = forms.ChoiceField(choices=choices12, label='Coat Length')
+        color = forms.CharField(strip=True,required=True, min_length=3, label="Color of the Pet")
+        #photo = forms.ImageField()
+
 
 class AddBrand(forms.ModelForm):
         email = forms.EmailField()
