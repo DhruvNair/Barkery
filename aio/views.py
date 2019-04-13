@@ -13,7 +13,7 @@ from mysql.connector import errorcode
 from django.utils import timezone
 
 def display_home(request):
-    return render(request, 'aio/home.html')
+    return render(request, 'aio/index.html')
 
 def namedtuplefetchall(cursor):
     row=0
@@ -227,7 +227,7 @@ def add_brand(request):
 def adopt_animal(request):
     try:
         cursor = connection.cursor()
-        cursor.execute('SELECT animal_type FROM animal')
+        cursor.execute('SELECT animal_type FROM aio_animal')
         result = dictfetchall(cursor)
         animals=[]
         for x in range(len(result)):
@@ -235,13 +235,13 @@ def adopt_animal(request):
     except mysql.connector.Error as error :
         connection.rollback() #rollback if any exception occured
     context = {"listanimal": animals}
-    return render(request, "aio/adoptanimal.html", context)
+    return render(request, "aio/adopthome.html", context)
 
 def filter(request, animal_names):
     try:
         cursor = connection.cursor()
         #Need Coat length, 
-        cursor.execute('SELECT animal.animal_breed as breed,pet_name,age,gender,onbarkerysince as daysonbarkery FROM pet WHERE animal.animal_type = animal_names and adopted = False')
+        cursor.execute('SELECT animal.animal_breed as breed,pet_name,age,gender,onbarkerysince as daysonbarkery FROM aio_pet WHERE animal.animal_type = animal_names and adopted = False')
         result = dictfetchall(cursor)
         for x in range(len(result)):
             now=timezone.now
