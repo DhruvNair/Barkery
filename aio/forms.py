@@ -95,24 +95,24 @@ class AddLocation(forms.Form):
 
 
 class AddPet(forms.Form):
-        pet_name = forms.CharField(
-                required=True, min_length=2, strip=True, label="Name of Pet")
-        age = forms.IntegerField(min_value=0, label="Age of Pet")
-        gender = forms.ChoiceField(choices=ch, label='Gender')
-        remarks = forms.CharField(strip=True, label="Remarks(if any)")
-        disease = forms.CharField(
-                strip=True, label="Diseases(if any): [Separate using ,]")
-        animal_types = forms.CharField(
-                required=True, min_length=3, strip=True, label='Animal')
-        animal_breeds = forms.CharField(
-                required=True, min_length=3, strip=True, label='Breed')
-        height = forms.FloatField(min_value=0.1, label="Height")
-        weight = forms.FloatField(min_value=0.1, label="Weight")
-        coatlength = forms.ChoiceField(choices=choices12, label='Coat Length')
-        color = forms.CharField(strip=True, required=True,
+    pet_name = forms.CharField(
+        required=True, min_length=2, strip=True, label="Name of Pet")
+    age = forms.IntegerField(min_value=0, label="Age of Pet")
+    gender = forms.ChoiceField(choices=ch, label='Gender')
+    remarks = forms.CharField(strip=True, label="Remarks(if any)")
+    disease = forms.CharField(
+        strip=True, label="Diseases(if any): [Separate using ,]")
+    animal_types = forms.CharField(
+        required=True, min_length=3, strip=True, label='Animal')
+    animal_breeds = forms.CharField(
+        required=True, min_length=3, strip=True, label='Breed')
+    height = forms.FloatField(min_value=0.1, label="Height")
+    weight = forms.FloatField(min_value=0.1, label="Weight")
+    coatlength = forms.ChoiceField(choices=choices12, label='Coat Length')
+    color = forms.CharField(strip=True, required=True,
                 min_length=3, label="Color of the Pet")
-        spayneuter = forms.ChoiceField(choices=ch1,label="Is it Spayed/Neutered?")
-        photo = forms.ImageField()
+    spayneuter = forms.ChoiceField(choices=ch1,label="Is it Spayed/Neutered?")
+    photo = forms.ImageField()
 
 
 class AddBrand(forms.ModelForm):
