@@ -16,7 +16,7 @@ class animal(models.Model):
         unique_together = (('animal_type', 'animal_breed'))
     
     def __str__(self):
-        return "Animal Type : {0} Breed : {1} Lifespan : {2} Height : {3} Weight : {4}".format(self.animal_type, self.animal_breed, self.avglife, self.height, self.weight)
+        return "Animal Type : {0} Breed : {1} Lifespan : {2}".format(self.animal_type, self.animal_breed, self.avglife)
 
 class pindata(models.Model):
     pincode = models.CharField(max_length = 10, primary_key=True)
