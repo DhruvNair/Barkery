@@ -14,29 +14,28 @@ from django.utils import timezone
 from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
-from .filters import PetFilter
+# from .filters import PetFilter
 
 pics=['photo1','photo2','photo3','photo4','photo5','photo6','photo7','photo8','photo9','photo10']
 def display_home(request):
     #reviews,No. of adopted, no. of strays, No. of shelters, No. of vets,
-    adoptedset=adoptiondetails.objects.filter(adopted=True).order_by(-'dateofadoption')
+    adoptedset=adoptiondetails.objects.filter(adopted=True).order_by('-dateofadoption')
     adoptedset=adoptedset[:7]
     petset=[]
     for adopted in adoptedset:
         pett=pet.objects.get(adopt=adopted)
         petset.append(pett)
     strayset=shelter.objects.all()
-
+    adset=len(adoptiondetails.objects.all())
     countstray=0
     countshelters=0
     for strays in strayset:
-        countstray+=strayset.stray
+        countstray+=strays.stray
     countshelters=len(strayset)
     vetty=vet.objects.all()
     countvet=len(vetty)
-    otdict = {'straynumber':countstray,'shelternumber':countshelters,'vetnumbers':countvet}
     context = {'adoptedset':adoptedset,'petset':petset,
-        'info':otdict,
+        'straynumber':countstray,'shelternumber':countshelters,'vetnumbers':countvet,'adoptednumber':adset,
     }
     
     return render(request, 'aio/index.html', context)
