@@ -17,6 +17,7 @@ from django.contrib.auth.decorators import login_required
 # from .filters import PetFilter
 
 pics=['photo1','photo2','photo3','photo4','photo5','photo6','photo7','photo8','photo9','photo10']
+QUERYSET=[]
 def display_home(request):
     #reviews,No. of adopted, no. of strays, No. of shelters, No. of vets,
     adoptedset=pet.objects.filter(adopted=True).order_by('-adopt__dateofadoption')
@@ -377,29 +378,30 @@ def adoptani(request):
     
 def adoptapet(request):
     choi=[]
+    form1=adoptform()
     if request.method == 'POST':
         animaltype = request.POST.get("Animal")
         ani=animal.objects.filter(animal_type=animaltype)
-        for an in ani:
-            choi.append(an.animal_breed)
-        form1=adoptform(choi)
-        form2=adoptform2()
-        context={
-            "form1":form1,
-            "form2":form2,
+        form1=adoptform(request.POST)
+        if form1.is_valid():
+            animal_breed = str(form1.cleaned_data['animal_breed'])
+            color = str(form1.cleaned_data['color'])
+            coatlength = str(form1.cleaned_data['coatlength'])
+            gender = str(form1.cleaned_data['gender'])
+            QUERYSET = [animaltype,animal_breed,color,coatlength,gender]
+            return redirect('disp')
+        
+        
+    context={
+       "form1":form1,
         }
     return render(request, "aio/ADOPT.html", context)
 
-def adoptform(request):
-    if request.method == 'POST':
-        animalbreed=request.POST.get("animalbreed")
-       # color=request.POST.get("")
 
 
-
-def displayanimals(request, animal_breed): 
+def displayanimals(request): 
     context={}
-    return render(request, "Display.html", context)
+    return render(request, "display.html", context)
 
 def filter(request, animal_names):
     try:
