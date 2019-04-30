@@ -115,7 +115,7 @@ class brand(models.Model):
 
 class item(models.Model):
     item_name = models.CharField(max_length=100, verbose_name="Item Name")
-    animal = models.ForeignKey(animal, on_delete=models.CASCADE)
+    animal = models.CharField(max_length=100, verbose_name="Animal Type")
     item_type = models.CharField(max_length=100, verbose_name="Item Type")
     description = models.CharField(max_length=100)
     cost = models.FloatField(default=0.0)
