@@ -399,9 +399,12 @@ def adoptapet(request):
 
 
 
-def displayanimals(request): 
+def displayanimals(request):
+    if request.method == "POST":
+        print(request.POST.get("animal_breed"))
+        print("Kill me now")
     context={}
-    return render(request, "display.html", context)
+    return render(request, "aio/display.html", context)
 
 def filter(request, animal_names):
     try:

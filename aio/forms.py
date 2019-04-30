@@ -141,7 +141,7 @@ class AddBrand(forms.ModelForm):
     
 
 class adoptform(forms.Form):
-    animal_breed=forms.CharField(required=True, strip=True, max_length=100)
+    animal_breed=forms.CharField(strip=True, max_length=100, required = False)
     color = forms.ChoiceField(choices=colorchoice, label="Color")
     coatlength = forms.ChoiceField(choices=choices12, label="Coat Length") 
     gender = forms.ChoiceField(choices=ch, label="Gender")
