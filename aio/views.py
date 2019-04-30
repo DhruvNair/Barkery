@@ -21,12 +21,9 @@ def display_home(request):
     #reviews,No. of adopted, no. of strays, No. of shelters, No. of vets,
     adoptedset=pet.objects.filter(adopted=True).order_by('-adopt__dateofadoption')
     adoptedset=adoptedset[:7]
-    petset=[]
-    for adopted in adoptedset:
-        pett=pet.objects.get(adopt=adopted)
-        petset.append(pett)
+    petset=pet.objects.filter(adopted=True)
     strayset=shelter.objects.all()
-    adset=len(adoptiondetails.objects.all())
+    adset=petset.count()
     countstray=0
     countshelters=0
     for strays in strayset:
