@@ -141,14 +141,13 @@ class AddBrand(forms.ModelForm):
 class adoptform(forms.ModelForm):
     def __init__(self, choi, *args, **kwargs):
         super(adoptform, self).__init__(*args, **kwargs)
-        self.fields['animalbreed'] = forms.MultipleChoiceField(choices=choi, widget=forms.CheckboxSelectMultiple())
+        self.fields['animalbreed'] = forms.ChoiceField(choices=choi, label="Breed")
     
     class Meta:
         model = animal
         fields = ['animal_breed']
 
 class adoptform2(forms.Form):
-    color = forms.MultipleChoiceField(choices=colorchoice, widget=forms.CheckboxSelectMultiple())
-    coatlength = forms.MultipleChoiceField(choices=choices12, widget=forms.CheckboxSelectMultiple()) 
-    gender = forms.MultipleChoiceField(choices=ch, widget=forms.CheckboxSelectMultiple())
-    
+    color = forms.ChoiceField(choices=colorchoice, label="Color")
+    coatlength = forms.ChoiceField(choices=choices12, label="Coat Length") 
+    gender = forms.ChoiceField(choices=ch, label="Gender")

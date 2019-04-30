@@ -382,6 +382,7 @@ def adoptapet(request):
     ani=animal.objects.filter(animal_type=animaltype)
     for an in ani:
        choi.append(an.animal_breed)
+    print(choi)
     form1=adoptform(choi)
     form2=adoptform2()
     if request.method == 'POST':
