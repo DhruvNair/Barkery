@@ -7,6 +7,7 @@ urlpatterns = [
 	path('', views.display_home, name='home'),
 	path('adopt/',views.adoptani,name='adopt'),
 	path('adoptpage/',views.adoptapet, name='adoptpage'),
+	path('adoptform/',views.adoptform, name='adoptform'),
 	path('adoptdisplay/',views.displayanimals, name='disp'),
 	# path('adopt/<slug:animal_names>', views.filter, name='filter'),
 	path('shop/', views.shop, name='shop'),

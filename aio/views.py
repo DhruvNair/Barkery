@@ -379,24 +379,23 @@ def adoptapet(request):
     choi=[]
     if request.method == 'POST':
         animaltype = request.POST.get("Animal")
-    ani=animal.objects.filter(animal_type=animaltype)
-    for an in ani:
-       choi.append(an.animal_breed)
-
-    form1=adoptform(choi)
-    form2=adoptform2()
-    if request.method == 'POST':
-        form1=adoptform(choi,request.POST)
-        form2=adoptform2(request.POST)
-        if form1.is_valid() and form2.is_valid():
-            animalbreed=form1.cleaned_data.get('animalbreed')
-            print(animalbreed)
-            return redirect(displayanimals, animal_breed=animalbreed)
+        ani=animal.objects.filter(animal_type=animaltype)
+        for an in ani:
+            choi.append(an.animal_breed)
+        form1=adoptform(choi)
+        form2=adoptform2()
         context={
             "form1":form1,
             "form2":form2,
         }
     return render(request, "aio/ADOPT.html", context)
+
+def adoptform(request):
+    if request.method == 'POST':
+        animalbreed=request.POST.get("animalbreed")
+       # color=request.POST.get("")
+
+
 
 def displayanimals(request, animal_breed): 
     context={}
