@@ -361,8 +361,7 @@ def add_brand(request):
     }
     return render(request, "aio/add_brand.html", context)
 
-
-def adopt_animal(request):
+def adoptani(request):
     try:
         cursor = connection.cursor()
         cursor.execute('SELECT distinct animal_type FROM aio_animal')
@@ -375,6 +374,32 @@ def adopt_animal(request):
     context = {"animals": animals}
     return render(request, "aio/adopthome.html", context)
 
+def adopt_animal(request,animaltype):
+    choi=[]
+    ani=animal.objects.get(animal_type=animaltype)
+    for an in ani:
+       choi.append(ani.animal_breed)
+    form=adoptform(choi)
+    return redirect(adoptapet, form1=form)
+    
+def adoptapet(request,form1):
+    form2=adoptform2()
+    if request.method == 'POST':
+        form1=adoptform(request.POST)
+        form2=adoptform2(request.POST)
+        if form1.valid() and form2.valid():
+            animalbreed=form1.cleaned_data.get('animalbreed')
+            print(animalbreed)
+            return redirect(displayanimals, animal_breed=animalbreed)
+        context={
+            "form1":form1,
+            "form2":form2,
+        }
+        return render(request, "ADOPT.html", context)
+
+def displayanimals(request, animal_breed): 
+    context={}
+    return render(request, "Display.html", context)
 
 def filter(request, animal_names):
     try:
