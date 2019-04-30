@@ -138,14 +138,11 @@ class AddBrand(forms.ModelForm):
         fields = ['brand_name', 'rating', 'email', 'contact', ]
 
 
-class adoptform(forms.ModelForm):
+class adoptform(forms.Form):
     def __init__(self, choi, *args, **kwargs):
         super(adoptform, self).__init__(*args, **kwargs)
         self.fields['animalbreed'] = forms.ChoiceField(choices=tuple([(name, name) for name in choi]), label="Breed")
     
-    class Meta:
-        model = animal
-        fields = ['animal_breed']
 
 class adoptform2(forms.Form):
     color = forms.ChoiceField(choices=colorchoice, label="Color")

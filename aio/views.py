@@ -380,6 +380,7 @@ def adoptapet(request):
     if request.method == 'POST':
         animaltype = request.POST.get("Animal")
     ani=animal.objects.filter(animal_type=animaltype)
+    print(ani)
     for an in ani:
        choi.append(an.animal_breed)
     print(choi)
