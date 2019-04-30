@@ -6,7 +6,6 @@ from . import views
 urlpatterns = [
 	path('', views.display_home, name='home'),
 	path('adopt/',views.adoptani,name='adopt'),
-	path('adoptmid/',views.adopt_animal, name='adoptmid'),
 	path('adoptpage/',views.adoptapet, name='adoptpage'),
 	path('adoptdisplay/',views.displayanimals, name='disp'),
 	# path('adopt/<slug:animal_names>', views.filter, name='filter'),
