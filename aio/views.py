@@ -380,14 +380,13 @@ def adoptapet(request):
     if request.method == 'POST':
         animaltype = request.POST.get("Animal")
     ani=animal.objects.filter(animal_type=animaltype)
-    print(ani)
     for an in ani:
        choi.append(an.animal_breed)
-    print(choi)
+
     form1=adoptform(choi)
     form2=adoptform2()
     if request.method == 'POST':
-        form1=adoptform(request.POST)
+        form1=adoptform(choi,request.POST)
         form2=adoptform2(request.POST)
         if form1.is_valid() and form2.is_valid():
             animalbreed=form1.cleaned_data.get('animalbreed')
