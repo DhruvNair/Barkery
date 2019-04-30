@@ -374,8 +374,11 @@ def adoptani(request):
     context = {"animals": animals}
     return render(request, "aio/adopthome.html", context)
 
-def adopt_animal(request,animaltype):
+def adopt_animal(request):
     choi=[]
+    if request.method == 'POST':
+        animaltype = request.POST.get("Animal")
+        print(animaltype)
     ani=animal.objects.get(animal_type=animaltype)
     for an in ani:
        choi.append(ani.animal_breed)
