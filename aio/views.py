@@ -19,7 +19,7 @@ from django.contrib.auth.decorators import login_required
 pics=['photo1','photo2','photo3','photo4','photo5','photo6','photo7','photo8','photo9','photo10']
 def display_home(request):
     #reviews,No. of adopted, no. of strays, No. of shelters, No. of vets,
-    adoptedset=adoptiondetails.objects.filter(adopted=True).order_by('-dateofadoption')
+    adoptedset=pet.objects.filter(adopted=True).order_by('-adopt__dateofadoption')
     adoptedset=adoptedset[:7]
     petset=[]
     for adopted in adoptedset:

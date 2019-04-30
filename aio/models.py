@@ -72,28 +72,26 @@ class vet(models.Model):
     
 class adoptiondetails(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    adopted = models.BooleanField(default=False)
     dateofadoption = models.DateField(null=True, default=timezone.now, verbose_name="Date Of Adoption")
     comments = models.CharField(max_length = 100, null=True, blank=False)
     def __str__(self):
-        return "User : {0} Adopted : {1} Date of Adoption : {2}".format(self.profile.user.username, self.adopted, self.dateofadoption)
-
-
+        return "User : {0} Date of Adoption : {1}".format(self.profile.user.username, self.dateofadoption)
 
 class pet(models.Model):
     animal = models.ForeignKey(animal, on_delete=models.CASCADE)
     pet_name = models.CharField(default= "Tommy", max_length=20,verbose_name="Pet Name")
     age = models.IntegerField(default=0)
     gender = models.CharField(max_length=10,choices=(('M','Male'),('F','Female')),blank=False)
-    remarks = models.CharField(max_length=100, null=True)
+    remarks = models.CharField(max_length=100, null=True,blank=True)
     onbarkerysince=models.DateTimeField(default=timezone.now)
     color = models.CharField(max_length=100, blank=False, null=True)
     spayneuter = models.CharField(max_length=10, choices=(('Yes','Yes'),('No','No')), blank=False, null=True, verbose_name="Is it Spayed/Neutered?")
     coatlength = models.CharField(max_length=10, choices=(('Hairless','Hairless'),('Short','Short'),('Medium','Medium'),('Long','Long'),('Wire','Wire'),('Curly','Curly')), blank=False, null=True,verbose_name="Coat Length")
-    disease=models.CharField(max_length=100, null=True)
-    user = models.ForeignKey(Profile,null=True, on_delete=models.CASCADE)
+    disease=models.CharField(max_length=100, null=True,blank=True)
+    user = models.ForeignKey(Profile,null=True,blank=True , on_delete=models.CASCADE)
     photo = models.ForeignKey(pictures, on_delete=models.DO_NOTHING)
-    adopt = models.ForeignKey(adoptiondetails, on_delete=models.DO_NOTHING, null=True)
+    adopted = models.BooleanField(default=False)
+    adopt = models.ForeignKey(adoptiondetails, on_delete=models.DO_NOTHING, null=True,blank=True)
     height=models.FloatField(default=0.0)
     weight=models.FloatField(default=0.0)
 
