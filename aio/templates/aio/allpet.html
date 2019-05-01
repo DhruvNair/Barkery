@@ -5,23 +5,26 @@
 		<div class="container">
 			<div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
 				<div class="col-md-9 ftco-animate text-center">
-					<h1 class="mb-3 bread">Shop</h1>
-					<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home</a></span> <span>Shop</span></p>
+					<h1 class="mb-3 bread">Adopt a Pet</h1>
+					<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home</a></span> <span>Adopt</span></p>
 				</div>
 			</div>
 		</div>
     </section>
     <div class="container">
         <Center style="float:left">
-            <h2>Items your pets will love</h2>
+            <h2>These pets waiting for some love</h2>
         </Center>
+        <div class="buttonarea" style="float:right;width: 100px;">
+            <span style="font-size:10px;"><a href="{% url 'adoptfilter' %}"><button class="btn-dark">Search for a specific animal</button></a></span>
+        </div>
     </div><br><br><br>
     <div class="container" style="padding-top:20px;padding-bottom:20px;">
-        {% if items %}
-            {% for item in items %}
+        {% if petset %}
+            {% for animal in petset %}
                 <div class="card" style="width:300px;">
-                    <img class="rounded-circle card-img" src="{{item.photo.photo1.url}}" width="300px">
-                    Name : {{ item.item_name}} <br> For : {{ item.animal }}{{ item.animal.animal_type }} <br> Brand : {{item.brand.brand_name}}
+                    <img class="rounded-circle card-img" src="{{animal.photo.photo1.url}}" width="300px">
+                    Name : {{ animal.pet_name}} <br> Age : {{ animal.age }} <br> Put up for adoption by : {{animal.user.user.username}}
                 </div><br><br>
             {% endfor %}
         {% else %}

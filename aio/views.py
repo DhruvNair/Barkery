@@ -401,9 +401,16 @@ def adoptapet(request):
 
 def displayanimals(request):
     if request.method == "POST":
-        print(request.POST.get("animal_breed"))
-        print("Kill me now")
-    context={}
+        animal = request.POST.get("animal_breed")
+        color = request.POST.get("color")
+        coatlength = request.POST.get("coatlength")
+        gender = request.POST.get("gender")
+        print(animal,color,coatlength,gender)
+        petset = pet.objects.filter(animal__animal_breed=animal,color=color,coatlength=coatlength,gender=gender)
+        context={'petlist':petset}
+        print(petset)
+    else:
+        context = {}
     return render(request, "aio/display.html", context)
 
 def filter(request, animal_names):
@@ -422,21 +429,38 @@ def filter(request, animal_names):
 
 
 def shop(request):
-    context = {}
+    items = item.objects.all()
+    context = {'items':items}
     return render(request, "aio/shop.html", context)
 
 
 def vets(request):
-    context = {}
+    vets = vet.objects.all()
+    context = {'vets':vets}
     return render(request, "aio/vets.html", context)
 
 
 def shelters(request):
-    context = {}
+    shelters = shelter.objects.filter(strays<50)
+    context = {'shelters':shelters}
     return render(request, "aio/shelters.html", context)
 
 
 def about(request):
-    
-    context = {}
+    petset=pet.objects.filter(adopted=True)
+    strayset=shelter.objects.all()
+    adset=petset.count()
+    countstray=0
+    countshelters=0
+    for strays in strayset:
+        countstray+=strays.stray
+    countshelters=len(strayset)
+    vetty=vet.objects.all()
+    countvet=len(vetty)
+    context = {'straynumber':countstray,'shelternumber':countshelters,'vetnumbers':countvet,'adoptednumber':adset}
     return render(request, "aio/about.html", context)
+
+def adoptionhome(request):
+    petset = pet.objects.filter(adopted=False)
+    context = {'petset':petset}
+    return render(request,"aio/allpet.html",context)

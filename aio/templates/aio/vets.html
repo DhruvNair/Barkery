@@ -1,6 +1,31 @@
-{% extends "base.html" %}
-{% load static %}
-{% block css %}
-{% endblock css %}
+{% extends 'base.html' %}
 {% block content %}
+	<section class="hero-wrap js-fullheight bg3">
+		<div class="overlay"></div>
+		<div class="container">
+			<div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
+				<div class="col-md-9 ftco-animate text-center">
+					<h1 class="mb-3 bread">Vets near you</h1>
+					<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home</a></span> <span>Vets</span></p>
+				</div>
+			</div>
+		</div>
+    </section>
+    <div class="container">
+        <Center style="float:left">
+            <h2>Vets in our database</h2>
+        </Center>
+    </div><br><br><br>
+    <div class="container" style="padding-top:20px;padding-bottom:20px;">
+        {% if vets %}
+            {% for vet in vets %}
+                <div class="card" style="width:300px;">
+                    <img class="rounded-circle card-img" src="{{vet.profile.photo.photo1.url}}" width="300px">
+                    Name : {{ vet.profile.user.username }} <br> Specialization : {{ vet.specialization }} <br> Address : "{{vet.address.housenumber}}",<br>{{vet.address.street}},<br>{{vet.address.pincode.pincode}},<br>{{vet.address.pincode.city}},<br>{{vet.address.pincode.state}}
+                </div><br><br>
+            {% endfor %}
+        {% else %}
+            There seem to be no pets to adopt right now : ( Try again later?
+        {% endif %}
+    </div>
 {% endblock content %}
